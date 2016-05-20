@@ -98,15 +98,13 @@ start:
 
     ; Cargar IDT
     lidt [IDT_DESC]
-    xchg bx,bx
- 
+
     ; Configurar controlador de interrupciones
 
     ; Cargar tarea inicial
 
     ; Habilitar interrupciones
     sti
-    mov word [fs:0xFA01],0x0000
 
     ; Saltar a la primera tarea: Idle
 

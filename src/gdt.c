@@ -76,7 +76,7 @@ gdt_entry gdt[GDT_COUNT] = {
         (unsigned char)     0x00,           /* base[23:16]  */
         (unsigned char)     0x02,           /* type         */
         (unsigned char)     0x01,           /* s            */
-        (unsigned char)     0x00,           /* dpl          */
+        (unsigned char)     0x03,           /* dpl          */
         (unsigned char)     0x01,           /* p            */
         (unsigned char)     0x03,           /* limit[16:19] */
         (unsigned char)     0x00,           /* avl          */
@@ -86,7 +86,7 @@ gdt_entry gdt[GDT_COUNT] = {
         (unsigned char)     0x00,           /* base[31:24]  */
     },
     [GDT_VIDEO_DESC] = (gdt_entry) {     // descriptor de video con privilegio 0
-        (unsigned short)    0xF9FF,         /* limit[0:15]  */
+        (unsigned short)    0xFA00,         /* limit[0:15]  */
         (unsigned short)    0x8000,         /* base[0:15]   */
         (unsigned char)     0x0B,           /* base[23:16]  */
         (unsigned char)     0x02,           /* type         */

@@ -67,7 +67,7 @@ global _isr%1
 
 _isr%1:
     mov eax, %1
-    imprimir_texto_mp intmsg%1, intlen%1, 0x07, 0, 0
+    imprimir_texto_mp intmsg%1, intlen%1, 0x07, %1, 0
     jmp $
 %endmacro
 
