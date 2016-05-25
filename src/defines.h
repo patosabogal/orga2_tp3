@@ -42,4 +42,7 @@
 /* -------------------------------------------------------------------------- */
 #define VIDEO_SCREEN            0x000B8000 /* direccion fisica del buffer de video */
 
+#define PAGE_DIRECTORY_BASE		0x27000
+#define PAGE_TABLE_BASE			0x28000
+
 #endif  /* !__DEFINES_H__ */

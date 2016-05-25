@@ -57,7 +57,6 @@ void idt_inicializar() {
     IDT_ENTRY(12)
     IDT_ENTRY(13)
     IDT_ENTRY(14)
-    // IDT_ENTRY(15) Reservado por Intel
     IDT_ENTRY(16)
     IDT_ENTRY(17)
     IDT_ENTRY(18)

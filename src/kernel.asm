@@ -6,9 +6,21 @@
 %include "imprimir.mac"
 
 extern GDT_DESC
+
 extern IDT_DESC
 extern idt_inicializar
 
+extern PDE
+extern mmu_inicializar
+
+extern habilitar_pic
+extern resetear_pic
+
+extern screen_inicializar
+
+;TEST
+extern game_inicializar
+extern screen_inicializar
 global start
 
 
@@ -77,16 +89,22 @@ start:
     imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 2, 0
 
     ; Inicializar pantalla
-    call limpiarPantalla
+    call screen_inicializar
     
     ; Inicializar el manejador de memoria
- 
     ; Inicializar el directorio de paginas
-    
+    call mmu_inicializar
     ; Cargar directorio de paginas
+    mov eax, [PDE]
+    mov cr3, eax
+    
 
     ; Habilitar paginacion
-    
+    mov eax,cr0
+    or eax,0x80000000
+    mov cr0,eax
+
+
     ; Inicializar tss
 
     ; Inicializar tss de la tarea Idle
@@ -99,16 +117,23 @@ start:
     ; Cargar IDT
     lidt [IDT_DESC]
 
-    ; Configurar controlador de interrupciones
+    ; Configurar controlador de interrupciones  
+    ; call habilitar_pic
+    ; call resetear_pic
 
     ; Cargar tarea inicial
 
     ; Habilitar interrupciones
-    sti
+    ; sti
+    
+
 
     ; Saltar a la primera tarea: Idle
 
     ; Ciclar infinitamente (por si algo sale mal...)
+    call game_inicializar
+    call screen_inicializar
+
     mov eax, 0xFFFF
     mov ebx, 0xFFFF
     mov ecx, 0xFFFF
@@ -121,7 +146,7 @@ start:
 limpiarPantalla:
     mov ecx,0
     .ciclo:
-        mov word [fs:ecx],0x04DB
+        mov word [fs:ecx],0x07DB
         add ecx,2
         cmp ecx,0xFA00 ;80*50*2bytes
         jne .ciclo

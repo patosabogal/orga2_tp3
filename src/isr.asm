@@ -18,43 +18,43 @@ extern fin_intr_pic1
 extern sched_proximo_indice
 
 
-intmsg0: db 'Divide Error',0
+intmsg0: db 'Divide Error'
 intlen0 equ    $ - intmsg0
-intmsg1: db 'RESERVED',0
+intmsg1: db 'RESERVED'
 intlen1 equ    $ - intmsg1
-intmsg2: db 'NMI Interrupt',0
+intmsg2: db 'NMI Interrupt'
 intlen2 equ    $ - intmsg2
-intmsg3: db 'Breakpoint',0
+intmsg3: db 'Breakpoint'
 intlen3 equ    $ - intmsg3
-intmsg4: db 'Overflow',0
+intmsg4: db 'Overflow'
 intlen4 equ    $ - intmsg4
-intmsg5: db 'BOUND Range Exceeded',0
+intmsg5: db 'BOUND Range Exceeded'
 intlen5 equ    $ - intmsg5
-intmsg6: db 'Invalid Opcode (Undefined Opcode)',0
+intmsg6: db 'Invalid Opcode (Undefined Opcode)'
 intlen6 equ    $ - intmsg6
-intmsg7: db 'Device Not Available',0
+intmsg7: db 'Device Not Available'
 intlen7 equ    $ - intmsg7
-intmsg8: db 'Double Fault',0
+intmsg8: db 'Double Fault'
 intlen8 equ    $ - intmsg8
-intmsg9: db 'Coprocessor Segment Overrun (reserved)',0
+intmsg9: db 'Coprocessor Segment Overrun (reserved)'
 intlen9 equ    $ - intmsg9
-intmsg10: db 'Invalid TSS',0
+intmsg10: db 'Invalid TSS'
 intlen10 equ    $ - intmsg10
-intmsg11: db 'Segment Not Present',0
+intmsg11: db 'Segment Not Present'
 intlen11 equ    $ - intmsg11
-intmsg12: db 'Stack-Segmentation Fault',0
+intmsg12: db 'Stack-Segmentation Fault'
 intlen12 equ    $ - intmsg12
-intmsg13: db 'General Protection',0
+intmsg13: db 'General Protection'
 intlen13 equ    $ - intmsg13
-intmsg14: db 'Page Fault',0
+intmsg14: db 'Page Fault'
 intlen14 equ    $ - intmsg14
-intmsg16: db 'General Protection',0
+intmsg16: db 'x87 FPU Floating-Point Error (Math Fault)'
 intlen16 equ    $ - intmsg16
-intmsg17: db 'General Protection',0
+intmsg17: db 'Alignment Check'
 intlen17 equ    $ - intmsg17
-intmsg18: db 'General Protection',0
+intmsg18: db 'Machine Check'
 intlen18 equ    $ - intmsg18
-intmsg19: db 'General Protection',0
+intmsg19: db 'SIMD Floating-Point Exception'
 intlen19 equ    $ - intmsg19
 
 
@@ -105,6 +105,7 @@ ISR 19
 ;;
 ;; Rutina de atención del RELOJ
 ;; -------------------------------------------------------------------------- ;;
+
 
 ;;
 ;; Rutina de atención del TECLADO

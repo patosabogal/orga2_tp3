@@ -51,7 +51,42 @@ void print_int(unsigned int n, unsigned int x, unsigned int y, unsigned short at
     p[y][x].a = attr;
 }
 
+void pintar_rectangulo(unsigned int x, unsigned int y, unsigned int cant_x, unsigned int cant_y, unsigned short attr){
+    unsigned int temp_x;
 
+    while ( y < cant_y){
+        temp_x = x;
+        while (temp_x < cant_x){
+            print(" ", temp_x, y, attr);
+            temp_x++;
+        }
+        y++;
+    }
+}
 
+void screen_inicializar(){
+    pintar_rectangulo(0, 0, 80, 1, C_FG_WHITE | C_BG_BLACK);
+    pintar_rectangulo(0, 1, 80, 45, C_FG_WHITE | C_BG_LIGHT_GREY);
+    pintar_rectangulo(0, 45, 80, 50, C_FG_WHITE | C_BG_BLACK);
 
+    pintar_rectangulo(48, 45, 54, 50, C_FG_WHITE | C_BG_RED);
+    pintar_rectangulo(54, 45, 60, 50, C_FG_WHITE | C_BG_BLUE);
 
+    print("<A     B>", 13, 46, C_FG_WHITE | C_BG_BLACK);
+    print("vidas", 41, 46, C_FG_WHITE | C_BG_BLACK);
+    print("vidas", 62, 46, C_FG_WHITE | C_BG_BLACK);
+
+    actualizar_display_vidas();
+    actualizar_display_puntos();
+
+}
+
+void actualizar_display_vidas(){
+    print_int(GAME.vidas_A, 43, 48, C_FG_WHITE | C_BG_BLACK);
+    print_int(GAME.vidas_B, 64, 48, C_FG_WHITE | C_BG_BLACK);
+}
+
+void actualizar_display_puntos(){
+    print_int(GAME.puntos_A, 51, 47, C_FG_WHITE | C_BG_RED);
+    print_int(GAME.puntos_B, 57, 47, C_FG_WHITE | C_BG_BLUE);
+}
