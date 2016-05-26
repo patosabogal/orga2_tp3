@@ -90,3 +90,24 @@ void actualizar_display_puntos(){
     print_int(GAME.puntos_A, 51, 47, C_FG_WHITE | C_BG_RED);
     print_int(GAME.puntos_B, 57, 47, C_FG_WHITE | C_BG_BLUE);
 }
+
+void mostrar_pantallita(unsigned short virus){
+    pintar_rectangulo(25,7,54,42,C_FG_WHITE | C_BG_BLACK);
+    pintar_rectangulo(26,8,53,41,C_FG_WHITE | C_BG_LIGHT_GREY);
+    if(virus==0){
+        pintar_rectangulo(26,8,53,9,C_FG_WHITE | C_BG_RED);
+        print("virus A", 26, 8, C_FG_WHITE | C_BG_RED);
+
+    }
+    else{
+        pintar_rectangulo(26,8,53,9,C_FG_WHITE | C_BG_BLUE);
+        print("virus B", 26, 8, C_FG_WHITE | C_BG_BLUE);
+        print_registro32("eax");
+    }
+}
+
+void print_registro32(const char* registro){
+    register int i asm("eax");
+    print(registro, 27, 10, C_FG_BLACK | C_BG_LIGHT_GREY);
+    print_hex(i,8, 31, 10, C_FG_WHITE | C_BG_LIGHT_GREY);
+}

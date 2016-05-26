@@ -34,4 +34,8 @@ void actualizar_display_vidas();
 
 void actualizar_display_puntos();
 
+void mostrar_pantallita(unsigned short virus);
+
+void print_registro32(const char* registro);
+
 #endif  /* !__SCREEN_H__ */
