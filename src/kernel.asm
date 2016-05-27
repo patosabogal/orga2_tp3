@@ -17,8 +17,10 @@ extern habilitar_pic
 extern resetear_pic
 
 extern screen_inicializar
+extern mostrar_pantallita
 
 ;TEST
+extern mmu_mapear_pagina
 extern game_inicializar
 extern screen_inicializar
 global start
@@ -131,8 +133,17 @@ start:
     ; Saltar a la primera tarea: Idle
 
     ; Ciclar infinitamente (por si algo sale mal...)
+    mov edi,0x4000000
+    mov edx,0x4000000
+    mov eax,cr3
+    mov esi,eax
+    xchg bx,bx
+    call mmu_mapear_pagina
+    xchg bx,bx
     call game_inicializar
     call screen_inicializar
+    call mostrar_pantallita
+
 
     mov eax, 0xFFFF
     mov ebx, 0xFFFF
