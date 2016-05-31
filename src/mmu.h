@@ -12,7 +12,7 @@
 #include "i386.h"
 #include "tss.h"
 #include "game.h"
-
+#include "screen.h"
 
 typedef struct str_page_entry{
 	unsigned int	attr:12;

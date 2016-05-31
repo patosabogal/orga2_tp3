@@ -12,17 +12,20 @@ extern idt_inicializar
 
 extern PDE
 extern mmu_inicializar
+extern mmu_inicializar_dir_kernel
 
 extern habilitar_pic
 extern resetear_pic
 
 extern screen_inicializar
-extern mostrar_pantallita
 
 ;TEST
 extern mmu_mapear_pagina
 extern game_inicializar
 extern screen_inicializar
+extern mostrar_pantallita
+
+
 global start
 
 
@@ -94,8 +97,10 @@ start:
     call screen_inicializar
     
     ; Inicializar el manejador de memoria
-    ; Inicializar el directorio de paginas
     call mmu_inicializar
+    ; Inicializar el directorio de paginas
+    call mmu_inicializar_dir_kernel
+    
     ; Cargar directorio de paginas
     mov eax, [PDE]
     mov cr3, eax
@@ -133,13 +138,17 @@ start:
     ; Saltar a la primera tarea: Idle
 
     ; Ciclar infinitamente (por si algo sale mal...)
-    mov edi,0x4000000
-    mov edx,0x4000000
+    mov eax,0x0005000 ;Fisica
+    push eax
     mov eax,cr3
-    mov esi,eax
-    xchg bx,bx
+    push eax
+    mov eax,0x400000 ;Logica
+    push eax
     call mmu_mapear_pagina
-    xchg bx,bx
+    pop eax
+    pop eax
+    pop eax
+
     call game_inicializar
     call screen_inicializar
     call mostrar_pantallita
