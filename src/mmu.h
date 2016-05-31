@@ -13,7 +13,7 @@
 #include "tss.h"
 #include "game.h"
 #include "screen.h"
-
+#include "pila.h"
 typedef struct str_page_entry{
 	unsigned int	attr:12;
 	unsigned int	base_page_addr:20;
