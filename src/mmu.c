@@ -40,10 +40,16 @@ void mmu_inicializar_dir_kernel() {
 }
 
 unsigned int mmu_proxima_pagina_fisica_libre() {
+	//Si stack esta vacio entonces sigo
 	unsigned int pagina_libre = proxima_pagina_libre;
 	proxima_pagina_libre += PAGE_SIZE;
 	
 	return pagina_libre;
+}
+
+void mmu_liberar_pagina(unsigned int pagina){
+	//Stackear
+	return;
 }
 
 void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica){
@@ -69,9 +75,89 @@ void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica
 	unsigned int pt_ind = PTE_INDEX(virtu);
 	pt->page_entries[pt_ind].attr |= (PG_PRESENT | PG_READ_WRITE);
 	pt->page_entries[pt_ind].base_page_addr = fisica >> 12;
+	tlbflush();
 }
 
-void mmu_inicializar_dir_tarea(){
+unsigned int tablaVacia(page_entries_set* table_addr){
 
+	unsigned int i = 0;
+	//Corta cuando alguno esta presente
+	while(i < 1024 && !(table_addr->page_entries[i].attr & PG_PRESENT)){
+		i++;
+	}
+	return i == 1024;
+}
+
+void mmu_unmapear_pagina(unsigned int virtu, unsigned int cr3){
+
+	page_entries_set* pd = (page_entries_set*) (cr3 & 0xFFFFF000);
+	unsigned int pd_ind = PDE_INDEX(virtu);
+	
+	page_entries_set* pt = (page_entries_set*) (pd->page_entries[pd_ind].base_page_addr << 12);
+	unsigned int pt_ind = PTE_INDEX(virtu);
+	pt->page_entries[pt_ind].attr = 0;
+
+	mmu_liberar_pagina(pt->page_entries[pt_ind].base_page_addr << 12);
+	//Si la pt esta vacia hay que limpiar la pd en esa posicion
+	if(tablaVacia(pt)){
+		pd->page_entries[pd_ind].attr = 0;
+	}
+	tlbflush();
+}
+
+unsigned int pointToAddr(unsigned int x,unsigned int y){
+	return  MAPA + (x+SIZE_W*y)*PAGE_SIZE;
+}
+
+unsigned int mmu_inicializar_dir_tarea(){
+ 	unsigned int x = 1;
+ 	unsigned int y = 1;
+ 	y = y-1; //Lo hago relativo a la pantalla
+ 	unsigned int jugador = 0;
+
+ 	//NUEVO DIRECTORIO DE PAGINA PARA MI NUEVA TAREA
+ 	page_entries_set* pd = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
+ 	page_entries_set* pt = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
+ 	unsigned int i = 0;
+	while(i < 1024){
+		pd->page_entries[i].attr = 0;
+		pt->page_entries[i].attr = 0;
+		i++;
+	}
+	unsigned int pde_int = PDE_INDEX(CODIGO);
+	pd->page_entries[pde_int].attr |= (PG_PRESENT | PG_READ_WRITE);
+	pd->page_entries[pde_int].base_page_addr = (unsigned int) pt << 12;
+
+	unsigned int pte_int = PTE_INDEX(CODIGO);
+	pt->page_entries[pte_int].attr |= (PG_PRESENT | PG_READ_WRITE);
+
+	unsigned int* addr = (unsigned int*) pointToAddr(x,y);
+	pt->page_entries[pte_int].base_page_addr = ((unsigned int) addr) << 12;
+
+	unsigned int* copyAddr = (unsigned int*) CODIGO_TAREA_H;
+
+	switch(jugador){
+		case JUG_A:
+			copyAddr = (unsigned int*) CODIGO_TAREA_A;
+			break;
+		case JUG_B:
+			copyAddr = (unsigned int*) CODIGO_TAREA_B;
+			break;
+		default:
+			copyAddr = (unsigned int*) CODIGO_TAREA_H;
+	}
+
+
+	//MAPEO EN EL KERNEL LA DIRECCION TAMBIEN
+	mmu_mapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE,(unsigned int) addr);
+	i = 0;
+	//Copio int a int
+	while(i < 1024){
+		*(addr + i) = *(copyAddr + i);
+		i++;
+	}
+	mmu_unmapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE);
+
+	return (unsigned int) pd;
 }
 

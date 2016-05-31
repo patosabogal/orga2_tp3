@@ -82,13 +82,13 @@ void screen_inicializar(){
 }
 
 void actualizar_display_vidas(){
-    print_int(GAME.vidas_A, 43, 48, C_FG_WHITE | C_BG_BLACK);
-    print_int(GAME.vidas_B, 64, 48, C_FG_WHITE | C_BG_BLACK);
+    print_int(GAME.A.vidas, 43, 48, C_FG_WHITE | C_BG_BLACK);
+    print_int(GAME.B.vidas, 64, 48, C_FG_WHITE | C_BG_BLACK);
 }
 
 void actualizar_display_puntos(){
-    print_int(GAME.puntos_A, 51, 47, C_FG_WHITE | C_BG_RED);
-    print_int(GAME.puntos_B, 57, 47, C_FG_WHITE | C_BG_BLUE);
+    print_int(GAME.A.puntos, 51, 47, C_FG_WHITE | C_BG_RED);
+    print_int(GAME.B.puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
 }
 
 void mostrar_pantallita(unsigned short virus){

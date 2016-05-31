@@ -24,8 +24,12 @@ typedef struct str_page_entries_set {
 	page_entry page_entries[1024];
 } __attribute__((__packed__)) page_entries_set;
 
+
+//unsigned int IdleTasksPDE[15];
+
 extern page_entries_set* PDE;
 void mmu_inicializar();
+void mmu_inicializar_dir_kernel();
 void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica);
 
 #endif	/* !__MMU_H__ */

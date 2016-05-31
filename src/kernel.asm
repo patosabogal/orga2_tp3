@@ -24,7 +24,7 @@ extern mmu_mapear_pagina
 extern game_inicializar
 extern screen_inicializar
 extern mostrar_pantallita
-
+extern mmu_inicializar_dir_tarea
 
 global start
 
@@ -100,7 +100,7 @@ start:
     call mmu_inicializar
     ; Inicializar el directorio de paginas
     call mmu_inicializar_dir_kernel
-    
+
     ; Cargar directorio de paginas
     mov eax, [PDE]
     mov cr3, eax
@@ -138,20 +138,22 @@ start:
     ; Saltar a la primera tarea: Idle
 
     ; Ciclar infinitamente (por si algo sale mal...)
-    mov eax,0x0005000 ;Fisica
-    push eax
-    mov eax,cr3
-    push eax
-    mov eax,0x400000 ;Logica
-    push eax
-    call mmu_mapear_pagina
-    pop eax
-    pop eax
-    pop eax
+    ; mov eax,0x0005000 ;Fisica
+    ; push eax
+    ; mov eax,cr3
+    ; push eax
+    ; mov eax,0x400000 ;Logica
+    ; push eax
+    ; call mmu_mapear_pagina
+    ; pop eax
+    ; pop eax
+    ; pop eax
 
     call game_inicializar
     call screen_inicializar
-    call mostrar_pantallita
+
+    call mmu_inicializar_dir_tarea
+    ;call mostrar_pantallita
 
 
     mov eax, 0xFFFF

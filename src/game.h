@@ -11,11 +11,16 @@
 #include "screen.h"
 #include "mmu.h"
 
+typedef struct str_jugador{
+	unsigned int vidas;
+	unsigned int puntos;
+	unsigned int x;
+	unsigned int y;
+} jugador;
+
 typedef struct str_game_state{
-	unsigned int vidas_A;
-	unsigned int vidas_B;
-	unsigned int puntos_A;
-	unsigned int puntos_B;
+	jugador A;
+	jugador B;
 } game_state;
 
 typedef enum direccion_e { IZQ = 0xAAA, DER = 0x441, ARB = 0xA33, ABA = 0x883  } direccion;
