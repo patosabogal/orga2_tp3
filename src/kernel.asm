@@ -153,6 +153,7 @@ start:
     call screen_inicializar
 
     call mmu_inicializar_dir_tarea
+    call mmu_inicializar_dir_tarea
     ;call mostrar_pantallita
 
 

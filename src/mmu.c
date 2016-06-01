@@ -169,4 +169,3 @@ unsigned int mmu_inicializar_dir_tarea(){
 	mmu_unmapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE);
 	return (unsigned int) pd;
 }
-
