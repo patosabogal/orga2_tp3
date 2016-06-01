@@ -34,6 +34,8 @@ void actualizar_display_vidas();
 
 void actualizar_display_puntos();
 
+void actualizar_display_cursores();
+
 void mostrar_pantallita(unsigned short virus);
 
 void print_registro32(const char* registro);

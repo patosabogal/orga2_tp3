@@ -125,13 +125,13 @@ start:
     lidt [IDT_DESC]
 
     ; Configurar controlador de interrupciones  
-    ; call habilitar_pic
-    ; call resetear_pic
+    call resetear_pic
+    call habilitar_pic
 
     ; Cargar tarea inicial
 
     ; Habilitar interrupciones
-    ; sti
+    sti
     
 
 

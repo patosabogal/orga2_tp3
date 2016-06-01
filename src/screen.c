@@ -78,6 +78,7 @@ void screen_inicializar(){
 
     actualizar_display_vidas();
     actualizar_display_puntos();
+    actualizar_display_cursores();
 
 }
 
@@ -90,6 +91,16 @@ void actualizar_display_puntos(){
     print_int(GAME.A.puntos, 51, 47, C_FG_WHITE | C_BG_RED);
     print_int(GAME.B.puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
 }
+
+void actualizar_display_cursores(){
+    print("*", GAME.A.x, GAME.A.y, C_FG_WHITE | C_BG_RED);
+    if (GAME.A.x == GAME.B.x && GAME.A.y == GAME.B.y){
+        print("*", GAME.B.x, GAME.B.y, C_FG_WHITE | C_BG_CYAN);
+    } else {
+        print("*", GAME.B.x, GAME.B.y, C_FG_WHITE | C_BG_BLUE);
+    }
+}
+
 
 void mostrar_pantallita(unsigned short virus){
     pintar_rectangulo(25,7,54,42,C_FG_WHITE | C_BG_BLACK);
