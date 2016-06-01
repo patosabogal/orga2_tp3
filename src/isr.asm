@@ -4,6 +4,9 @@
 ; ==============================================================================
 ; definicion de rutinas de atencion de interrupciones
 
+extern screen_inicializar
+extern atender_teclado
+
 %include "imprimir.mac"
 
 BITS 32
@@ -13,6 +16,9 @@ sched_tarea_selector:   dw 0x00
 
 ;; PIC
 extern fin_intr_pic1
+
+;; reloj
+extern screen_proximo_reloj
 
 ;; Sched
 extern sched_proximo_indice
@@ -105,6 +111,29 @@ ISR 19
 ;;
 ;; Rutina de atención del RELOJ
 ;; -------------------------------------------------------------------------- ;;
+
+global _isr32
+_isr32:
+    pushad
+    call proximo_reloj
+    call fin_intr_pic1
+    popad
+    iret
+
+global _isr33
+_isr33:
+    pushad
+    in al, 0x60
+    push eax
+    call atender_teclado
+    pop eax
+
+    call screen_inicializar
+    call fin_intr_pic1
+    popad
+    iret
+
+
 
 
 ;;
