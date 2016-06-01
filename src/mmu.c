@@ -15,6 +15,7 @@
 
 #define PAGE_SIZE		0x00001000
 
+pila pila_libres;
 page_entries_set* PDE;
 page_entries_set* PTE;
 unsigned int proxima_pagina_libre;
@@ -23,6 +24,7 @@ void mmu_inicializar(){
  	proxima_pagina_libre = INICIO_PAGINAS_LIBRES;
  	PDE = (page_entries_set*) PAGE_DIRECTORY_BASE;
  	PTE = (page_entries_set*) PAGE_TABLE_BASE;
+ 	nueva_pila(&pila_libres,(unsigned int*)MAPA);//Base de la pila en MAPA (crece para abajo)
 }
 
 void mmu_inicializar_dir_kernel() {
@@ -38,17 +40,21 @@ void mmu_inicializar_dir_kernel() {
 	PDE->page_entries[0].attr = wr_p;
 	PDE->page_entries[0].base_page_addr = PAGE_TABLE_BASE >> 12;
 }
-
 unsigned int mmu_proxima_pagina_fisica_libre() {
-	//Si stack esta vacio entonces sigo
-	unsigned int pagina_libre = proxima_pagina_libre;
-	proxima_pagina_libre += PAGE_SIZE;
-	
+	unsigned int pagina_libre;
+	if(pila_libres.cant == 0){
+		pagina_libre = proxima_pagina_libre;
+		proxima_pagina_libre += PAGE_SIZE;
+	}
+	else{
+		pagina_libre = pop_pila(&pila_libres);
+	}
 	return pagina_libre;
 }
 
 void mmu_liberar_pagina(unsigned int pagina){
-	//Stackear
+	//print_hex((unsigned int) pila_libres.tope,8,0,0,C_FG_WHITE | C_BG_BLACK);
+	push_pila(&pila_libres, pagina);
 	return;
 }
 
@@ -97,11 +103,15 @@ void mmu_unmapear_pagina(unsigned int virtu, unsigned int cr3){
 	unsigned int pt_ind = PTE_INDEX(virtu);
 	pt->page_entries[pt_ind].attr = 0;
 
-	mmu_liberar_pagina(pt->page_entries[pt_ind].base_page_addr << 12);
+	mmu_liberar_pagina(pd->page_entries[pd_ind].base_page_addr << 12);
 	//Si la pt esta vacia hay que limpiar la pd en esa posicion
 	if(tablaVacia(pt)){
 		pd->page_entries[pd_ind].attr = 0;
 	}
+	if(tablaVacia(pd)){
+		mmu_liberar_pagina((unsigned int) pd);
+	}
+
 	tlbflush();
 }
 
@@ -126,13 +136,13 @@ unsigned int mmu_inicializar_dir_tarea(){
 	}
 	unsigned int pde_int = PDE_INDEX(CODIGO);
 	pd->page_entries[pde_int].attr |= (PG_PRESENT | PG_READ_WRITE);
-	pd->page_entries[pde_int].base_page_addr = (unsigned int) pt << 12;
+	pd->page_entries[pde_int].base_page_addr = (unsigned int) pt >> 12;
 
 	unsigned int pte_int = PTE_INDEX(CODIGO);
 	pt->page_entries[pte_int].attr |= (PG_PRESENT | PG_READ_WRITE);
 
 	unsigned int* addr = (unsigned int*) pointToAddr(x,y);
-	pt->page_entries[pte_int].base_page_addr = ((unsigned int) addr) << 12;
+	pt->page_entries[pte_int].base_page_addr = ((unsigned int) addr) >> 12;
 
 	unsigned int* copyAddr = (unsigned int*) CODIGO_TAREA_H;
 
@@ -153,11 +163,10 @@ unsigned int mmu_inicializar_dir_tarea(){
 	i = 0;
 	//Copio int a int
 	while(i < 1024){
-		*(addr + i) = *(copyAddr + i);
+		addr[i] = copyAddr[i];
 		i++;
 	}
 	mmu_unmapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE);
-
 	return (unsigned int) pd;
 }
 
