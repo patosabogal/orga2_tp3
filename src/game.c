@@ -68,6 +68,18 @@ void atender_teclado(const char tecla_fea){
 		case 0x26:	// L
 			game_mover_cursor(&GAME.B, derecha);
 			break;
+		case 0x2a:	// LShift
+			game_mover_cursor(&GAME.B, derecha);
+			// Lanzar tarea
+			break;
+		case 0x36:
+			game_mover_cursor(&GAME.B, derecha);
+			// Lanzar tarea
+			break;			
+		case 0x15:
+			game_mover_cursor(&GAME.B, derecha);
+			// Lanzar tarea
+			break;
 	}
 
 }
