@@ -7,6 +7,9 @@
 extern screen_inicializar
 extern atender_teclado
 
+ADDR_SIZE   equ 4
+OFFSET_ECX  equ 7
+
 %include "imprimir.mac"
 
 BITS 32
@@ -120,6 +123,10 @@ _isr32:
     popad
     iret
 
+;;
+;; Rutina de atención del TECLADO
+;; -------------------------------------------------------------------------- ;;
+
 global _isr33
 _isr33:
     pushad
@@ -133,16 +140,18 @@ _isr33:
     popad
     iret
 
-
-
-
-;;
-;; Rutina de atención del TECLADO
-;; -------------------------------------------------------------------------- ;;
-
 ;;
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
+
+global _isr102
+_isr102:
+    pushad    
+
+    mov dword [esp + ADDR_SIZE*OFFSET_ECX], 0x42
+
+    popad
+    iret
 
 %define DONDE  0x124
 %define SOY    0xA6A

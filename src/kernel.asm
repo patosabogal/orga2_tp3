@@ -157,6 +157,10 @@ start:
     ;call mostrar_pantallita
 
 
+    int 0x66
+    xchg bx, bx
+
+
     mov eax, 0xFFFF
     mov ebx, 0xFFFF
     mov ecx, 0xFFFF

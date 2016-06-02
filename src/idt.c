@@ -62,6 +62,7 @@ void idt_inicializar() {
     IDT_ENTRY(18)
     IDT_ENTRY(19)
 
-    IDT_ENTRY(32)  // inicializar descriptor interrupcion reloj
-    IDT_ENTRY(33)  // inicializar descriptor interrupcion teclado
+    IDT_ENTRY(32)   // inicializar descriptor interrupcion reloj
+    IDT_ENTRY(33)   // inicializar descriptor interrupcion teclado
+    IDT_ENTRY(102)   // inicializar descriptor interrupcion syscall
 }
