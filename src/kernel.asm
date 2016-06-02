@@ -158,8 +158,6 @@ start:
 
 
     int 0x66
-    xchg bx, bx
-
 
     mov eax, 0xFFFF
     mov ebx, 0xFFFF

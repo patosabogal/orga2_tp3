@@ -79,7 +79,9 @@ void screen_inicializar(){
     actualizar_display_vidas();
     actualizar_display_puntos();
     actualizar_display_cursores();
-
+    if (DEBUG_MODE){
+        print("Y", 79, 0, C_FG_WHITE | C_BG_BLACK);
+    }
 }
 
 void actualizar_display_vidas(){
