@@ -150,8 +150,6 @@ start:
 
 
 
-
-
     mov eax, 0xFFFF
     mov ebx, 0xFFFF
     mov ecx, 0xFFFF

@@ -39,4 +39,5 @@ void game_inicializar();
 void atender_teclado(char tecla);
 
 extern game_state GAME;
+extern unsigned int DEBUG_MODE;
 #endif  /* !__GAME_H__ */
