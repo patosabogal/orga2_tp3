@@ -14,6 +14,8 @@ extern PDE
 extern mmu_inicializar
 extern mmu_inicializar_dir_kernel
 
+extern tss_inicializar
+
 extern habilitar_pic
 extern resetear_pic
 
@@ -115,7 +117,7 @@ start:
     ; Inicializar tss
 
     ; Inicializar tss de la tarea Idle
-
+    call tss_inicializar
     ; Inicializar el scheduler
 
     ; Inicializar la IDT
@@ -133,32 +135,21 @@ start:
     ; Habilitar interrupciones
     sti
     
-
-
-    ; Saltar a la primera tarea: Idle
-
-    ; Ciclar infinitamente (por si algo sale mal...)
-    ; mov eax,0x0005000 ;Fisica
-    ; push eax
-    ; mov eax,cr3
-    ; push eax
-    ; mov eax,0x400000 ;Logica
-    ; push eax
-    ; call mmu_mapear_pagina
-    ; pop eax
-    ; pop eax
-    ; pop eax
-
     call game_inicializar
     call screen_inicializar
-
-    call mmu_inicializar_dir_tarea
-    call mmu_inicializar_dir_tarea
     ;call mostrar_pantallita
 
+    ; Saltar a la primera tarea: Idle
+    mov ax,1001000b ;Tarea inicial
+    ltr ax
+    xchg bx,bx
+    jmp 1010000b:0x69 ;Idle
 
-    int 0x66
-    xchg bx, bx
+    ; Ciclar infinitamente (por si algo sale mal...)
+
+
+
+
 
 
     mov eax, 0xFFFF
