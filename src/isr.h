@@ -10,7 +10,6 @@
 #define __ISR_H__
 
 void _isr0();
-void _isr1();
 void _isr2();
 void _isr3();
 void _isr4();
