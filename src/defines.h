@@ -22,11 +22,12 @@
 #define CANT                    	5
 #define SIZE_W                     80
 #define SIZE_H                     44
+#define PAGE_SIZE			0x00001000
 
 
 /* Indices en la gdt */
 /* -------------------------------------------------------------------------- */
-#define GDT_COUNT 					4000
+#define GDT_COUNT 					100
 
 #define GDT_IDX_NULL_DESC           0
 #define GDT_IDX_CODE_0_DESC			4
@@ -37,10 +38,16 @@
 #define GDT_TSS_INICIAL				9
 #define GDT_TSS_IDLE				10
 
+#define GDT_TSS_COMIENZO			11
+#define GDT_TSS_FIN					100
+
 /* Offsets en la gdt */
 /* -------------------------------------------------------------------------- */
 #define GDT_OFF_NULL_DESC           (GDT_IDX_NULL_DESC      << 3)
-
+#define GDT_OFF_CODE_0_DESC			(GDT_IDX_CODE_0_DESC 	<< 3)
+#define GDT_OFF_CODE_3_DESC			(GDT_IDX_CODE_3_DESC 	<< 3)
+#define GDT_OFF_DATA_0_DESC			(GDT_IDX_DATA_0_DESC 	<< 3)
+#define GDT_OFF_DATA_3_DESC			(GDT_IDX_DATA_3_DESC 	<< 3)
 /* Jugadores */
 /* -------------------------------------------------------------------------- */
 #define JUG_A	0

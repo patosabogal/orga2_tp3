@@ -26,8 +26,7 @@ extern mmu_mapear_pagina
 extern game_inicializar
 extern screen_inicializar
 extern mostrar_pantallita
-extern mmu_inicializar_dir_tarea
-
+extern tss_nueva
 global start
 
 
@@ -79,13 +78,13 @@ start:
     modoprotegido:
     BITS 32
     ; Establecer selectores de segmentos
-    mov ax,110000b
+    mov ax,0x30
     mov ds,ax ;Segmento de datos de kernel
     mov ss,ax ;Segmento de datos de kernel
     mov es,ax
     mov gs,ax
 
-    mov ax,1000000b ;Video de kernel
+    mov ax,0x40 ;Video de kernel
     mov fs,ax
 
     ; Establecer la base de la pila
@@ -142,7 +141,6 @@ start:
     ; Saltar a la primera tarea: Idle
     mov ax,1001000b ;Tarea inicial
     ltr ax
-    xchg bx,bx
     jmp 1010000b:0x69 ;Idle
 
     ; Ciclar infinitamente (por si algo sale mal...)
