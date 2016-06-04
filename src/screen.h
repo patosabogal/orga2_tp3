@@ -30,11 +30,15 @@ void print_int(unsigned int n, unsigned int x, unsigned int y, unsigned short at
 
 void screen_inicializar();
 
+void actualizar_dislpay_estatico();
+
 void actualizar_display_vidas();
 
 void actualizar_display_puntos();
 
 void actualizar_display_cursores();
+
+void actualizar_display_debug_mode();
 
 void mostrar_pantallita(unsigned short virus);
 

@@ -65,7 +65,15 @@ void pintar_rectangulo(unsigned int x, unsigned int y, unsigned int cant_x, unsi
 }
 
 void screen_inicializar(){
-    pintar_rectangulo(0, 0, 80, 1, C_FG_WHITE | C_BG_BLACK);
+	actualizar_dislpay_estatico();
+    actualizar_display_vidas();
+    actualizar_display_puntos();
+    actualizar_display_cursores();
+    actualizar_display_debug_mode();
+}
+
+void actualizar_dislpay_estatico(){
+	pintar_rectangulo(0, 0, 80, 1, C_FG_WHITE | C_BG_BLACK);
     pintar_rectangulo(0, 1, 80, 45, C_FG_WHITE | C_BG_LIGHT_GREY);
     pintar_rectangulo(0, 45, 80, 50, C_FG_WHITE | C_BG_BLACK);
 
@@ -75,13 +83,6 @@ void screen_inicializar(){
     print("<A     B>", 13, 46, C_FG_WHITE | C_BG_BLACK);
     print("vidas", 41, 46, C_FG_WHITE | C_BG_BLACK);
     print("vidas", 62, 46, C_FG_WHITE | C_BG_BLACK);
-
-    actualizar_display_vidas();
-    actualizar_display_puntos();
-    actualizar_display_cursores();
-    if (DEBUG_MODE){
-        print("Y", 79, 0, C_FG_WHITE | C_BG_BLACK);
-    }
 }
 
 void actualizar_display_vidas(){
@@ -103,6 +104,11 @@ void actualizar_display_cursores(){
     }
 }
 
+void actualizar_display_debug_mode(){
+	if (DEBUG_MODE){
+        print("Y", 79, 0, C_FG_WHITE | C_BG_BLACK);
+    }
+}
 
 void mostrar_pantallita(unsigned short virus){
     pintar_rectangulo(25,7,54,42,C_FG_WHITE | C_BG_BLACK);

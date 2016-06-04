@@ -95,7 +95,7 @@ start:
     imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 2, 0
 
     ; Inicializar pantalla
-    call screen_inicializar
+    ; call screen_inicializar
     
     ; Inicializar el manejador de memoria
     call mmu_inicializar
