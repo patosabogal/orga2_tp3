@@ -65,11 +65,16 @@ void pintar_rectangulo(unsigned int x, unsigned int y, unsigned int cant_x, unsi
 }
 
 void screen_inicializar(){
+    escribir_nombre_grupo()
 	actualizar_dislpay_estatico();
     actualizar_display_vidas();
     actualizar_display_puntos();
     actualizar_display_cursores();
     actualizar_display_debug_mode();
+}
+
+void escribir_nombre_grupo(){
+    print("Lo bueno de las arvejas", 50, 0, C_FG_WHITE | C_BG_BLACK);
 }
 
 void actualizar_dislpay_estatico(){

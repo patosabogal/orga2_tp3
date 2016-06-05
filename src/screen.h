@@ -30,6 +30,8 @@ void print_int(unsigned int n, unsigned int x, unsigned int y, unsigned short at
 
 void screen_inicializar();
 
+void escribir_nombre_grupo();
+
 void actualizar_dislpay_estatico();
 
 void actualizar_display_vidas();
