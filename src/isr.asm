@@ -117,7 +117,7 @@ ISR 19
 global _isr32
 _isr32:
     pushad
-    ;call proximo_reloj
+    ;call proximo_reloj  // Ahora se ocupa la tarea IDLE de esto
     call fin_intr_pic1
     popad
     iret

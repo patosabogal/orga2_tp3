@@ -107,6 +107,8 @@ void mmu_unmapear_pagina(unsigned int virtu, unsigned int cr3){
 	//Si la pt esta vacia hay que limpiar la pd en esa posicion
 	if(tablaVacia(pt)){
 		pd->page_entries[pd_ind].attr = 0;
+		// ¿En este caso no habría que liberar la página asociada a la tabla para ser consistentes?
+		// Porque cuando mapeamos le damos una nueva página si esta en 0 el bit de presente
 	}
 	if(tablaVacia(pd)){
 		mmu_liberar_pagina((unsigned int) pd);
