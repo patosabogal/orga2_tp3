@@ -21,12 +21,13 @@ unsigned int proxima_pagina_libre;
 
 void mmu_inicializar(){
  	proxima_pagina_libre = INICIO_PAGINAS_LIBRES;
- 	PDE = (page_entries_set*) PAGE_DIRECTORY_BASE;
- 	PTE = (page_entries_set*) PAGE_TABLE_BASE;
  	nueva_pila(&pila_libres,(unsigned int*)MAPA);//Base de la pila en MAPA (crece para abajo)
 }
 
 void mmu_inicializar_dir_kernel() {
+ 	PDE = (page_entries_set*) PAGE_DIRECTORY_BASE;
+ 	PTE = (page_entries_set*) PAGE_TABLE_BASE;
+ 	
 	unsigned int i = 0;
 	unsigned int wr_p = PG_READ_WRITE | PG_PRESENT;
 	while (i < 1024){ 
