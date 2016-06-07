@@ -15,10 +15,10 @@ void game_lanzar(unsigned int jugador) {
 void game_soy(unsigned int yoSoy) {
 }
 
-void game_donde(unsigned int* pos) {
+void game_donde(unsigned int* pos) {	
 }
 
-void game_mapear(int x, int y) {
+void game_mapear(unsigned int x,unsigned int y) {
 }
 
 void game_inicializar(){
@@ -27,6 +27,7 @@ void game_inicializar(){
 		0,		// puntos
 		0,		// x inicial
 		1,		// y inicial
+		0		// Tarea Actual
 	};
 
 	jugador jug_B = {
@@ -34,10 +35,11 @@ void game_inicializar(){
 		0,		// puntos
 		79,		// x inicial
 		1,		// y inicial
+		0		// Tarea Actual
 	};
 
-	GAME.A = jug_A;
-	GAME.B = jug_B;
+	GAME.js[A] = jug_A;
+	GAME.js[B] = jug_B;
 }
 
 void atender_teclado(const char tecla_fea){
@@ -46,35 +48,35 @@ void atender_teclado(const char tecla_fea){
 
 	switch(tecla){
 		case 0x11:	// W
-			game_mover_cursor(&GAME.A, arriba);
+			game_mover_cursor(&GAME.js[A], arriba);
 			break;
 		case 0x1e:	// A
-			game_mover_cursor(&GAME.A, izquierda);
+			game_mover_cursor(&GAME.js[A], izquierda);
 			break;
 		case 0x1f:	// S
-			game_mover_cursor(&GAME.A, abajo);
+			game_mover_cursor(&GAME.js[A], abajo);
 			break;
 		case 0x20:	// D
-			game_mover_cursor(&GAME.A, derecha);
+			game_mover_cursor(&GAME.js[A], derecha);
 			break;
 		case 0x17:	// I
-			game_mover_cursor(&GAME.B, arriba);
+			game_mover_cursor(&GAME.js[B], arriba);
 			break;
 		case 0x24:	// J
-			game_mover_cursor(&GAME.B, izquierda);
+			game_mover_cursor(&GAME.js[B], izquierda);
 			break;
 		case 0x25:	// K
-			game_mover_cursor(&GAME.B, abajo);
+			game_mover_cursor(&GAME.js[B], abajo);
 			break;
 		case 0x26:	// L
-			game_mover_cursor(&GAME.B, derecha);
+			game_mover_cursor(&GAME.js[B], derecha);
 			break;
 		case 0x2a:	// LShift
-			game_mover_cursor(&GAME.B, derecha);
+			game_mover_cursor(&GAME.js[B], derecha);
 			// Lanzar tarea
 			break;
 		case 0x36:	// RShift
-			game_mover_cursor(&GAME.B, derecha);
+			game_mover_cursor(&GAME.js[B], derecha);
 			// Lanzar tarea
 			break;			
 		case 0x15:	// Y
@@ -125,3 +127,4 @@ void game_mover_cursor(jugador* j, direccion dir){
 	}
 
 }
+

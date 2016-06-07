@@ -6,6 +6,9 @@
 
 extern screen_inicializar
 extern atender_teclado
+extern game_mapear
+extern game_donde
+extern game_soy
 
 ADDR_SIZE   equ 4
 OFFSET_ECX  equ 7
@@ -143,14 +146,6 @@ _isr33:
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
 
-global _isr102
-_isr102:
-    pushad    
-
-    mov dword [esp + ADDR_SIZE*OFFSET_ECX], 0x42
-
-    popad
-    iret
 
 %define DONDE  0x124
 %define SOY    0xA6A
@@ -159,6 +154,35 @@ _isr102:
 %define VIRUS_ROJO 0x841
 %define VIRUS_AZUL 0x325
 
+
+global _isr102
+_isr102:
+    pushad
+    push ebx
+
+    cmp eax,DONDE
+    jne .SOY
+    
+    call game_donde
+
+    .SOY:
+    cmp eax,SOY
+    jne .MAPEAR
+    call game_soy
+
+    .MAPEAR:
+    cmp eax, MAPEAR
+    jne .MELLAMARONMAL
+    push ecx
+    call game_mapear
+    pop ecx
+
+    .MELLAMARONMAL:
+    mov dword [esp + ADDR_SIZE*OFFSET_ECX], 0x42
+
+    pop ebx
+    popad
+    iret
 
 ;; Funciones Auxiliares
 ;; -------------------------------------------------------------------------- ;;

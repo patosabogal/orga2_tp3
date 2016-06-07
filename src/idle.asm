@@ -8,8 +8,12 @@ BITS 32
 
 %include "imprimir.mac"
 
-idle:
+idle: 
     .loopear:
+        mov ebx,pos
+        mov eax,0x124
+        int 0x66
+        mov
         inc dword [numero]
         cmp dword [numero], 0x4
         jb .imprimir
@@ -35,6 +39,7 @@ message1: db '|'
 message2: db '/'
 message3: db '-'
 message4: db '\'
+pos: dw 1,1
 
 chirimbolo_open: db '('
 chirimbolo_close: db ')'

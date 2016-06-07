@@ -91,21 +91,21 @@ void actualizar_dislpay_estatico(){
 }
 
 void actualizar_display_vidas(){
-    print_int(GAME.A.vidas, 43, 48, C_FG_WHITE | C_BG_BLACK);
-    print_int(GAME.B.vidas, 64, 48, C_FG_WHITE | C_BG_BLACK);
+    print_int(GAME.js[A].vidas, 43, 48, C_FG_WHITE | C_BG_BLACK);
+    print_int(GAME.js[B].vidas, 64, 48, C_FG_WHITE | C_BG_BLACK);
 }
 
 void actualizar_display_puntos(){
-    print_int(GAME.A.puntos, 51, 47, C_FG_WHITE | C_BG_RED);
-    print_int(GAME.B.puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
+    print_int(GAME.js[A].puntos, 51, 47, C_FG_WHITE | C_BG_RED);
+    print_int(GAME.js[B].puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
 }
 
 void actualizar_display_cursores(){
-    print("*", GAME.A.x, GAME.A.y, C_FG_WHITE | C_BG_RED);
-    if (GAME.A.x == GAME.B.x && GAME.A.y == GAME.B.y){
-        print("*", GAME.B.x, GAME.B.y, C_FG_WHITE | C_BG_CYAN);
+    print("*", GAME.js[A].x, GAME.js[A].y, C_FG_WHITE | C_BG_RED);
+    if (GAME.js[A].x == GAME.js[B].x && GAME.js[A].y == GAME.js[B].y){
+        print("*", GAME.js[B].x, GAME.js[B].y, C_FG_WHITE | C_BG_CYAN);
     } else {
-        print("*", GAME.B.x, GAME.B.y, C_FG_WHITE | C_BG_BLUE);
+        print("*", GAME.js[B].x, GAME.js[B].y, C_FG_WHITE | C_BG_BLUE);
     }
 }
 
