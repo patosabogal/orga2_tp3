@@ -16,33 +16,33 @@ tss tss_idle;
 void tss_inicializar() {
 	gdt[GDT_TSS_INICIAL] = (gdt_entry) {     // descriptor de tss inicial
         (unsigned short)    sizeof(tss)-1,         /* limit[0:15]  */
-		(unsigned int)   	&tss_inicial,           /* base[0:15]   */
-		(unsigned int)     	&tss_inicial >> 16,                  /* base[23:16]  */
+		(unsigned int)   	&tss_inicial,          /* base[0:15]   */
+		(unsigned int)     	&tss_inicial >> 16,    /* base[23:16]  */
         (unsigned char)     0x09,                  /* type         */
-        (unsigned char)     0x00,           /* s            */
-        (unsigned char)     0x00,           /* dpl          */
-        (unsigned char)     0x01,           /* p            */
-        (unsigned char)     0x00,           /* limit[16:19] */
-        (unsigned char)     0x00,           /* avl          */
-        (unsigned char)     0x00,           /* l            */
-        (unsigned char)     0x01,           /* db           */
-        (unsigned char)     0x00,           /* g            */
-		(unsigned int)     	&tss_inicial >> 24,           /* base[31:24]  */
+        (unsigned char)     0x00,                  /* s            */
+        (unsigned char)     0x00,                  /* dpl          */
+        (unsigned char)     0x01,                  /* p            */
+        (unsigned char)     0x00,                  /* limit[16:19] */
+        (unsigned char)     0x00,                  /* avl          */
+        (unsigned char)     0x00,                  /* l            */
+        (unsigned char)     0x01,                  /* db           */
+        (unsigned char)     0x00,                  /* g            */
+		(unsigned int)     	&tss_inicial >> 24,    /* base[31:24]  */
     };
     gdt[GDT_TSS_IDLE] = (gdt_entry) {     // descriptor de tss idle
         (unsigned short)    sizeof(tss)-1,         /* limit[0:15]  */
-		(unsigned int)		&tss_idle,           /* base[0:15]   */
-		(unsigned int)		&tss_idle >> 16,/* base[23:16]  */
+		(unsigned int)		&tss_idle,             /* base[0:15]   */
+		(unsigned int)		&tss_idle >> 16,       /* base[23:16]  */
         (unsigned char)     0x09,                  /* type         */
-        (unsigned char)     0x00,           /* s            */
-        (unsigned char)     0x00,           /* dpl          */
-        (unsigned char)     0x01,           /* p            */
-        (unsigned char)     0x00,           /* limit[16:19] */
-        (unsigned char)     0x00,           /* avl          */
-        (unsigned char)     0x00,           /* l            */
-        (unsigned char)     0x01,           /* db           */
-        (unsigned char)     0x00,           /* g            */
-		(unsigned int)    	&tss_idle >> 24,           /* base[31:24]  */
+        (unsigned char)     0x00,                  /* s            */
+        (unsigned char)     0x00,                  /* dpl          */
+        (unsigned char)     0x01,                  /* p            */
+        (unsigned char)     0x00,                  /* limit[16:19] */
+        (unsigned char)     0x00,                  /* avl          */
+        (unsigned char)     0x00,                  /* l            */
+        (unsigned char)     0x01,                  /* db           */
+        (unsigned char)     0x00,                  /* g            */
+		(unsigned int)    	&tss_idle >> 24,       /* base[31:24]  */
     };
 
     tss_idle.eip = 0x00010000;
