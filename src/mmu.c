@@ -122,6 +122,7 @@ unsigned int pointToAddr(unsigned int x,unsigned int y){
 }
 
 unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo){
+// unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo,x,y){
  	unsigned int x = 1;
  	unsigned int y = 1;
  	y = y-1; //Lo hago relativo a la pantalla
