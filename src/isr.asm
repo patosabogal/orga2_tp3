@@ -91,7 +91,6 @@ isrClock:            db '|/-\'
 ;; Rutina de atención de las EXCEPCIONES
 ;; -------------------------------------------------------------------------- ;;
 ISR 0
-ISR 1
 ISR 2
 ISR 3
 ISR 4
@@ -118,7 +117,7 @@ ISR 19
 global _isr32
 _isr32:
     pushad
-    call proximo_reloj
+    ;call proximo_reloj  // Ahora se ocupa la tarea IDLE de esto
     call fin_intr_pic1
     popad
     iret

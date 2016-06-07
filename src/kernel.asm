@@ -14,6 +14,8 @@ extern PDE
 extern mmu_inicializar
 extern mmu_inicializar_dir_kernel
 
+extern tss_inicializar
+
 extern habilitar_pic
 extern resetear_pic
 
@@ -24,8 +26,7 @@ extern mmu_mapear_pagina
 extern game_inicializar
 extern screen_inicializar
 extern mostrar_pantallita
-extern mmu_inicializar_dir_tarea
-
+extern tss_nueva
 global start
 
 
@@ -77,13 +78,13 @@ start:
     modoprotegido:
     BITS 32
     ; Establecer selectores de segmentos
-    mov ax,110000b
+    mov ax,0x30
     mov ds,ax ;Segmento de datos de kernel
     mov ss,ax ;Segmento de datos de kernel
     mov es,ax
     mov gs,ax
 
-    mov ax,1000000b ;Video de kernel
+    mov ax,0x40 ;Video de kernel
     mov fs,ax
 
     ; Establecer la base de la pila
@@ -94,7 +95,7 @@ start:
     imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 2, 0
 
     ; Inicializar pantalla
-    call screen_inicializar
+    ; call screen_inicializar
     
     ; Inicializar el manejador de memoria
     call mmu_inicializar
@@ -115,7 +116,7 @@ start:
     ; Inicializar tss
 
     ; Inicializar tss de la tarea Idle
-
+    call tss_inicializar
     ; Inicializar el scheduler
 
     ; Inicializar la IDT
@@ -133,32 +134,18 @@ start:
     ; Habilitar interrupciones
     sti
     
-
-
-    ; Saltar a la primera tarea: Idle
-
-    ; Ciclar infinitamente (por si algo sale mal...)
-    ; mov eax,0x0005000 ;Fisica
-    ; push eax
-    ; mov eax,cr3
-    ; push eax
-    ; mov eax,0x400000 ;Logica
-    ; push eax
-    ; call mmu_mapear_pagina
-    ; pop eax
-    ; pop eax
-    ; pop eax
-
     call game_inicializar
     call screen_inicializar
-
-    call mmu_inicializar_dir_tarea
-    call mmu_inicializar_dir_tarea
     ;call mostrar_pantallita
 
+    ; Saltar a la primera tarea: Idle
+    mov ax,1001000b ;Tarea inicial
+    ltr ax
+    jmp 1010000b:0x69 ;Idle
 
-    int 0x66
-    xchg bx, bx
+    ; Ciclar infinitamente (por si algo sale mal...)
+
+
 
 
     mov eax, 0xFFFF

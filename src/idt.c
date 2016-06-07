@@ -43,7 +43,6 @@ idt_descriptor IDT_DESC = {
 //BANANITA DOLCA
 void idt_inicializar() {
     IDT_ENTRY(0)
-    IDT_ENTRY(1)
     IDT_ENTRY(2)
     IDT_ENTRY(3)
     IDT_ENTRY(4)

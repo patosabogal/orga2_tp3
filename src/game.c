@@ -7,6 +7,7 @@
 #include "game.h"
 
 game_state GAME;
+unsigned int DEBUG_MODE = TRUE;
 
 void game_lanzar(unsigned int jugador) {
 }
@@ -72,12 +73,16 @@ void atender_teclado(const char tecla_fea){
 			game_mover_cursor(&GAME.B, derecha);
 			// Lanzar tarea
 			break;
-		case 0x36:
+		case 0x36:	// RShift
 			game_mover_cursor(&GAME.B, derecha);
 			// Lanzar tarea
 			break;			
-		case 0x15:
-			game_mover_cursor(&GAME.B, derecha);
+		case 0x15:	// Y
+			if (DEBUG_MODE){
+				DEBUG_MODE = FALSE;
+			} else {
+				DEBUG_MODE = TRUE;
+			}
 			// Lanzar tarea
 			break;
 	}
