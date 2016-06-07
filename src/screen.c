@@ -108,17 +108,41 @@ void mostrar_pantallita(unsigned short virus){
     if(virus==0){
         pintar_rectangulo(26,8,53,9,C_FG_WHITE | C_BG_RED);
         print("virus A", 26, 8, C_FG_WHITE | C_BG_RED);
-
     }
     else{
         pintar_rectangulo(26,8,53,9,C_FG_WHITE | C_BG_BLUE);
         print("virus B", 26, 8, C_FG_WHITE | C_BG_BLUE);
-        print_registro32("eax");
     }
+
+    unsigned int* asd = (unsigned int *) 0x27000;
+    print("eax", 27, 10, C_FG_BLACK | C_BG_LIGHT_GREY);
+    print_hex(*asd,8, 31, 10, C_FG_WHITE | C_BG_LIGHT_GREY);
+    
+    // print_registro32("ebx"27,12);
+    // print_registro32("ecx",27,14);
+    // print_registro32("edx",27,16);
+    // print_registro32("esi",27,18);
+    // print_registro32("edi",27,20);
+    // print_registro32("ebp",27,22);
+    // print_registro32("esp",27,24);
+    // print_registro32("eip",27,26);
+    // print_Cregistro("cd",28,28);
+    // print_Cregistro("ds",28,30);
+    // print_Cregistro("es",28,32);
+    // print_Cregistro("fs",28,34);
+    // print_Cregistro("gs",28,36);
+    // print_Cregistro("ss",28,38);
+    // print_Eflags("eflags",27,40);
 }
 
-void print_registro32(const char* registro){
-    register int i asm("eax");
-    print(registro, 27, 10, C_FG_BLACK | C_BG_LIGHT_GREY);
-    print_hex(i,8, 31, 10, C_FG_WHITE | C_BG_LIGHT_GREY);
-}
+// void print_registro32(const char* registro,short x,short y){
+//     register int i asm("eax");
+//     print(registro, x, y, C_FG_BLACK | C_BG_LIGHT_GREY);
+//     print_hex(i,8, x+4, y, C_FG_WHITE | C_BG_LIGHT_GREY);
+// }
+
+// void print_Cregistro(const char*registro, short x, short y){
+//     register int i asm("eax");
+//     print(registro, x, y, C_FG_BLACK | C_BG_LIGHT_GREY);
+//     print_hex(i,8, x+4, y, C_FG_WHITE | C_BG_LIGHT_GREY);
+// }
