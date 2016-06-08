@@ -131,10 +131,11 @@ start:
 
     ; Cargar tarea inicial
 
+    call game_inicializar
+
     ; Habilitar interrupciones
     sti
     
-    call game_inicializar
     call screen_inicializar
     ;call mostrar_pantallita
 

@@ -17,8 +17,6 @@ OFFSET_ECX  equ 7
 
 BITS 32
 
-sched_tarea_offset:     dd 0x00
-sched_tarea_selector:   dw 0x00
 
 ;; PIC
 extern fin_intr_pic1
@@ -122,17 +120,22 @@ ISR 19
 ;; Rutina de atención del RELOJ
 ;; -------------------------------------------------------------------------- ;;
 
+sched_tarea_offset:     dd 0x00
+sched_tarea_selector:   dw 0x00
+
 global _isr32
 _isr32:
     pushad
 
 	call proximo_reloj
 	call sched_proximo_indice
-	cmp ax, 0
-	je  .nojump
-    	mov [selector], ax
-	    call fin_intr_pic1
-	    jmp far [offset]
+    cmp ax, 0
+    je  .nojump
+        mov [sched_tarea_selector], ax
+        call fin_intr_pic1
+        xchg bx, bx
+        jmp far [sched_tarea_offset]
+        xchg bx, bx
 	    jmp .end
 	.nojump:
         call fin_intr_pic1

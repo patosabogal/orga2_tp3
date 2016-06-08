@@ -78,7 +78,7 @@ unsigned int tss_entrada_disponible(){
 	return i;
 }
 
-void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
+unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 	// codigo = (unsigned int*) 0x11000;
 	unsigned int disp = tss_entrada_disponible();
 	
@@ -99,6 +99,7 @@ void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 	tss_tn->es = GDT_OFF_DATA_3_DESC;
 
 	tss_tn->cs = GDT_OFF_CODE_3_DESC;
+    
 	tss_tn->cr3 = cr3;
 	tss_tn->eflags |= (PORQUESI | INTERRUPCIONES);
 
@@ -117,5 +118,8 @@ void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
         (unsigned char)     0x00,           /* g            */
 		(unsigned int)    	tss_tn >> 24,   /* base[31:24]  */
     };
+
+    unsigned short _selector_tss =  (disp << 3);
+    return _selector_tss;
 
 }

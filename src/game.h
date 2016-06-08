@@ -22,6 +22,7 @@ typedef struct str_tarea{
 	unsigned int y;
 	unsigned short vivo;
 	unsigned short zuzia;
+	unsigned short selector_tss;
 } tarea;
 
 typedef struct str_jugador{

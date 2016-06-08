@@ -63,13 +63,14 @@ void game_inicializar_tareas_jugadores(){
 }
 
 tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y){
-	tss_nueva(codigo, x, y);
+	unsigned short _selector_tss = tss_nueva(codigo, x, y);
 	tarea new_task;
 
 	new_task.x = x;
 	new_task.y = y;
 	new_task.vivo = TRUE;
 	new_task.zuzia = H;
+	new_task.selector_tss = _selector_tss;
 
 	return new_task;
 }
