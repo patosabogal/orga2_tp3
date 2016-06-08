@@ -42,6 +42,8 @@ void actualizar_display_cursores();
 
 void actualizar_display_debug_mode();
 
+void actualizar_display_tareas();
+
 void mostrar_pantallita(unsigned short virus);
 
 void print_registro32(const char* registro);

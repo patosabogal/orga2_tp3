@@ -69,6 +69,7 @@ void screen_inicializar(){
     escribir_nombre_grupo();
     actualizar_display_vidas();
     actualizar_display_puntos();
+    actualizar_display_tareas();
     actualizar_display_cursores();
     actualizar_display_debug_mode();
 }
@@ -112,6 +113,24 @@ void actualizar_display_cursores(){
 void actualizar_display_debug_mode(){
 	if (DEBUG_MODE){
         print("Y", 79, 0, C_FG_WHITE | C_BG_BLACK);
+    }
+}
+
+void actualizar_display_tareas(){
+    int i;
+    for (i = 0; i < 15; ++i)
+    {
+        tarea _tarea = GAME.iniciales[i];
+
+        if (_tarea.vivo) print(" ", _tarea.x, _tarea.y, C_FG_WHITE | C_BG_GREEN);
+    }
+
+    for (i = 0; i < 5; ++i){
+        tarea _tareaA = GAME.js[A].tareas[i];
+        tarea _tareaB = GAME.js[B].tareas[i];
+
+        if (_tareaA.vivo ) print(" ", _tareaA.x, _tareaA.y, C_FG_WHITE | C_BG_RED);
+        if (_tareaB.vivo ) print(" ", _tareaB.x, _tareaB.y, C_FG_WHITE | C_BG_RED);
     }
 }
 

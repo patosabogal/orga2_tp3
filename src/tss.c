@@ -63,7 +63,12 @@ void tss_inicializar() {
 	for(i = GDT_TSS_COMIENZO; i < GDT_TSS_FIN; i++){
 		gdt[i].p = 0;
 	}
+
 }
+
+void tss_inicializar_tareas_iniciales(){
+
+} 
 
 unsigned int tss_entrada_disponible(){
 	unsigned int i = GDT_TSS_COMIENZO;
@@ -73,14 +78,14 @@ unsigned int tss_entrada_disponible(){
 	return i;
 }
 
-void tss_nueva(unsigned int* codigo){
-	codigo = (unsigned int*) 0x11000;
+void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
+	// codigo = (unsigned int*) 0x11000;
 	unsigned int disp = tss_entrada_disponible();
 	
 	tss* tss_tn = (tss*) mmu_proxima_pagina_fisica_libre();
 	unsigned int pila3 = (unsigned int) tss_tn + PAGE_SIZE; //LICUADO DE TORONJA
 	unsigned int pila0 = mmu_proxima_pagina_fisica_libre() + PAGE_SIZE;
-	unsigned int cr3 = mmu_inicializar_dir_tarea(codigo);
+	unsigned int cr3 = mmu_inicializar_dir_tarea(codigo, x, y);
 
 	tss_tn->eip = CODIGO; //Direccion de codigo mapeada a codigo de la tarea
 	tss_tn->ebp = pila3;

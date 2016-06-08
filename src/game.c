@@ -7,7 +7,7 @@
 #include "game.h"
 
 game_state GAME;
-unsigned int DEBUG_MODE = TRUE;
+unsigned int DEBUG_MODE = FALSE;
 
 void game_lanzar(unsigned int jugador) {
 }
@@ -40,6 +40,38 @@ void game_inicializar(){
 
 	GAME.js[A] = jug_A;
 	GAME.js[B] = jug_B;
+
+	game_inicializar_tareas_iniciales();
+	game_inicializar_tareas_jugadores();
+}
+
+void game_inicializar_tareas_iniciales(){
+	int i;
+	for (i = 0; i < 15; ++i)
+	{
+		GAME.iniciales[i] = nueva_tarea((unsigned int *)CODIGO_TAREA_H, 16+i, 16-i);
+	}
+}
+
+void game_inicializar_tareas_jugadores(){
+	int i;
+	for (i = 0; i < 5; ++i)
+	{
+		GAME.js[A].tareas[i].vivo = FALSE;
+		GAME.js[B].tareas[i].vivo = FALSE;
+	}
+}
+
+tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y){
+	tss_nueva(codigo, x, y);
+	tarea new_task;
+
+	new_task.x = x;
+	new_task.y = y;
+	new_task.vivo = TRUE;
+	new_task.zuzia = H;
+
+	return new_task;
 }
 
 void atender_teclado(const char tecla_fea){
@@ -127,4 +159,3 @@ void game_mover_cursor(jugador* j, direccion dir){
 	}
 
 }
-

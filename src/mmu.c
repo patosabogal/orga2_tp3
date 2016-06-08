@@ -121,10 +121,10 @@ unsigned int pointToAddr(unsigned int x,unsigned int y){
 	return  MAPA + (x+SIZE_W*y)*PAGE_SIZE;
 }
 
-unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo){
- 	unsigned int x = 1;
- 	unsigned int y = 1;
- 	y = y-1; //Lo hago relativo a la pantalla
+unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, unsigned int y){
+ 	// unsigned int x = 1;
+ 	// unsigned int y = 1;
+ 	// y = y-1; //Lo hago relativo a la pantalla
  	//NUEVO DIRECTORIO DE PAGINA PARA MI NUEVA TAREA
  	page_entries_set* pd = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
  	page_entries_set* pt = (page_entries_set*) mmu_proxima_pagina_fisica_libre();

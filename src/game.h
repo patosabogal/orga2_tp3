@@ -35,9 +35,9 @@ typedef struct str_jugador{
 
 typedef struct str_game_state{
 	jugador js[2];
-	tarea sanas[15];
+	tarea iniciales[15];
 	unsigned short actualSana;
-	unsigned short corriendo;
+	id corriendo;
 } game_state;
 
 // typedef enum direccion_e { IZQ = 0xAAA, DER = 0x441, ARB = 0xA33, ABA = 0x883  } direccion;
@@ -54,6 +54,12 @@ void game_mover_cursor(jugador* j, direccion dir);
 void game_inicializar();
 
 void atender_teclado(char tecla);
+
+tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y);
+
+void game_inicializar_tareas_iniciales();
+
+void game_inicializar_tareas_jugadores();
 
 extern game_state GAME;
 extern unsigned int DEBUG_MODE;

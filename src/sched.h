@@ -11,6 +11,7 @@
 #include "screen.h"
 #include "tss.h"
 #include "gdt.h"
+#include "game.h"
 
 unsigned short sched_proximo_indice();
 

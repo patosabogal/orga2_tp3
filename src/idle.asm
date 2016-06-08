@@ -13,7 +13,7 @@ idle:
         mov ebx,pos
         mov eax,0x124
         int 0x66
-        mov
+    
         inc dword [numero]
         cmp dword [numero], 0x4
         jb .imprimir

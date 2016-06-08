@@ -70,6 +70,11 @@ intmsg19: db 'SIMD Floating-Point Exception'
 intlen19 equ    $ - intmsg19
 
 
+      
+offset: dd 0
+selector: dw 0
+
+
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -120,11 +125,20 @@ ISR 19
 global _isr32
 _isr32:
     pushad
-    ;call proximo_reloj  // Ahora se ocupa la tarea IDLE de esto
-    call fin_intr_pic1
-    popad
-    iret
 
+	call proximo_reloj
+	call sched_proximo_indice
+	cmp ax, 0
+	je  .nojump
+    	mov [selector], ax
+	    call fin_intr_pic1
+	    jmp far [offset]
+	    jmp .end
+	.nojump:
+        call fin_intr_pic1
+	.end:
+        popad
+        iret
 ;;
 ;; Rutina de atención del TECLADO
 ;; -------------------------------------------------------------------------- ;;
