@@ -20,27 +20,34 @@ id _proximo_tipo(id _actual){
 	return 0;
 }
 
-unsigned int _no_tiene_vivos(id _id){
-	return FALSE;
+unsigned short _tiene_vivos(id _id){
+	unsigned short _algun_vivo = 0;
+	if (_id == H) {
+		int i = 0;
+		while(i < 15 && !_algun_vivo) _algun_vivo = GAME.iniciales[i].vivo;
+	} else {
+		int i = 0;
+		while(i < 5 && !_algun_vivo) _algun_vivo = GAME.js[_id].tareas[i].vivo;
+	}
+
+	return _algun_vivo;
 }
 
+unsigned short _selector_proxima_tarea(id _id){
+	// COMO ACCEDO AL SELECTOR DE UNA TAREA
+	return 0;
+}
 
 unsigned short sched_proximo_indice() {
 	id _actual = GAME.corriendo;
 
 	id _prox = _proximo_tipo(_actual);
-	while (_no_tiene_vivos(_prox) && _prox != _actual ) {
-		_prox = _proximo_tipo(_prox);
-	}
+	if (_tiene_vivos(_prox)) return _selector_proxima_tarea(_prox);
 
-	if (_prox == _actual && _no_tiene_vivos(_actual)){
-		// todos muertos
-		return 0;
-	} else {
-		// no estan todos muertos
-		// ACA TE DEVUELVO EL SELECTOR DE LA TAREA
-		return 0;
-	}
+	id _prox_prox = _proximo_tipo(_prox);
+	if (_tiene_vivos(_prox_prox)) return _selector_proxima_tarea(_prox_prox);
 
-	return 0;	
+	if (_tiene_vivos(_actual)) return _selector_proxima_tarea(_actual);
+
+	return 0;
 }
