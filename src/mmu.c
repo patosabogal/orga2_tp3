@@ -30,7 +30,7 @@ void mmu_inicializar_dir_kernel() {
  	
 	unsigned int i = 0;
 	unsigned int wr_p = PG_READ_WRITE | PG_PRESENT;
-	while (i < 1024){ 
+	while (i < 1024){
 		PDE->page_entries[i].attr = 0;
 		PTE->page_entries[i].attr = wr_p;
 		PTE->page_entries[i].base_page_addr = i;
@@ -58,14 +58,14 @@ void mmu_liberar_pagina(unsigned int pagina){
 	return;
 }
 
-void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica){
+void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica, unsigned int user){
 	page_entries_set* pd = (page_entries_set*) (cr3 & 0xFFFFF000);
 	page_entries_set* pt;
 
 	unsigned int pd_ind = PDE_INDEX(virtu);
 	//LO MAS DECLARATIVO QUE EXISTE
 	if(!(pd->page_entries[pd_ind].attr & PG_PRESENT)){
-		pd->page_entries[pd_ind].attr |= (PG_PRESENT | PG_READ_WRITE);
+		pd->page_entries[pd_ind].attr = (PG_PRESENT | PG_READ_WRITE | user);
 		pd->page_entries[pd_ind].base_page_addr = mmu_proxima_pagina_fisica_libre() >> 12;
 
 		//Setear la nueva en 0
@@ -79,7 +79,7 @@ void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica
 
 	pt = (page_entries_set*) (pd->page_entries[pd_ind].base_page_addr << 12);
 	unsigned int pt_ind = PTE_INDEX(virtu);
-	pt->page_entries[pt_ind].attr |= (PG_PRESENT | PG_READ_WRITE);
+	pt->page_entries[pt_ind].attr |= (PG_PRESENT | PG_READ_WRITE | user);
 	pt->page_entries[pt_ind].base_page_addr = fisica >> 12;
 	tlbflush();
 }
@@ -124,16 +124,21 @@ unsigned int pointToAddr(unsigned int x,unsigned int y){
 unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, unsigned int y){
  	//NUEVO DIRECTORIO DE PAGINA PARA MI NUEVA TAREA
  	page_entries_set* pd = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
- 	page_entries_set* pt = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
+ 	//page_entries_set* pt = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
  	unsigned int i = 0;
 	while(i < 1024){
 		pd->page_entries[i].attr = 0;
-		pt->page_entries[i].attr = 0;
 		i++;
 	}
 
 	//IDENTITY 4MB
 	i = 0;
+	while(i<1024){
+		mmu_mapear_pagina(i*PAGE_SIZE,(unsigned int) pd,i*PAGE_SIZE,0);
+		i++;
+	}
+
+	/*i = 0;
 	unsigned int wr_p = PG_READ_WRITE | PG_PRESENT;
 	while (i < 1024){ 
 		pd->page_entries[i].attr = 0;
@@ -142,9 +147,12 @@ unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, uns
 		i++;
 	}
 	pd->page_entries[0].attr = wr_p;
-	pd->page_entries[0].base_page_addr = (unsigned int) pt >> 12;
+	pd->page_entries[0].base_page_addr = (unsigned int) pt >> 12;*/
 
 	//CODIGO EN LA 8kk
+	unsigned int* addr = (unsigned int*) pointToAddr(x,y);
+	mmu_mapear_pagina(CODIGO,(unsigned int) pd,(unsigned int) addr, PG_USER);
+/*
 	pt = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
 	unsigned int pde_int = PDE_INDEX(CODIGO);
 	pd->page_entries[pde_int].attr |= (PG_PRESENT | PG_READ_WRITE | PG_USER);
@@ -156,9 +164,9 @@ unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, uns
 	unsigned int* addr = (unsigned int*) pointToAddr(x,y);
 	pt->page_entries[pte_int].base_page_addr = ((unsigned int) addr) >> 12;
 
-
+*/
 	//MAPEO EN EL KERNEL LA DIRECCION TAMBIEN
-	mmu_mapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE,(unsigned int) addr);
+	mmu_mapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE,(unsigned int) addr,0);
 	i = 0;
 	//Copio int a int
 	while(i < 1024){
