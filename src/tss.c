@@ -48,8 +48,8 @@ void tss_inicializar() {
     tss_idle.eip = 0x00010000;
     tss_idle.ebp = KERNEL_BASE_STACK;
     tss_idle.esp = KERNEL_BASE_STACK;
-    tss_idle.esp0 = KERNEL_BASE_STACK;
-    tss_idle.ss0 = 0x30;
+    //tss_idle.esp0 = KERNEL_BASE_STACK;
+    //tss_idle.ss0 = 0x30;
     tss_idle.cs = 0x20;
     tss_idle.ss = 0x30;
     tss_idle.ds = 0x30;
@@ -66,10 +66,6 @@ void tss_inicializar() {
 
 }
 
-void tss_inicializar_tareas_iniciales(){
-
-} 
-
 unsigned int tss_entrada_disponible(){
 	unsigned int i = GDT_TSS_COMIENZO;
 	while( i < GDT_TSS_FIN && gdt[i].p == 1){
@@ -83,7 +79,12 @@ unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 	unsigned int disp = tss_entrada_disponible();
 	
 	tss* tss_tn = (tss*) mmu_proxima_pagina_fisica_libre();
-	// unsigned int pila3 = (unsigned int) tss_tn + PAGE_SIZE; //LICUADO DE TORONJA
+	unsigned int i = 0;
+    unsigned short* p = (unsigned short*) tss_tn;
+    while(i < sizeof(tss)){
+        p[i] = 0;
+        i++;
+    }
 	unsigned int pila0 = mmu_proxima_pagina_fisica_libre() + PAGE_SIZE;
 	unsigned int cr3 = mmu_inicializar_dir_tarea(codigo, x, y);
 
