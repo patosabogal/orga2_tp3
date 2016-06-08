@@ -83,13 +83,13 @@ void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 	unsigned int disp = tss_entrada_disponible();
 	
 	tss* tss_tn = (tss*) mmu_proxima_pagina_fisica_libre();
-	unsigned int pila3 = (unsigned int) tss_tn + PAGE_SIZE; //LICUADO DE TORONJA
+	// unsigned int pila3 = (unsigned int) tss_tn + PAGE_SIZE; //LICUADO DE TORONJA
 	unsigned int pila0 = mmu_proxima_pagina_fisica_libre() + PAGE_SIZE;
 	unsigned int cr3 = mmu_inicializar_dir_tarea(codigo, x, y);
 
 	tss_tn->eip = CODIGO; //Direccion de codigo mapeada a codigo de la tarea
-	tss_tn->ebp = pila3;
-	tss_tn->esp = pila3;
+	tss_tn->ebp = BASE_PILA_TAREA;
+	tss_tn->esp = BASE_PILA_TAREA;
 	tss_tn->esp0 = pila0;
 	tss_tn->ss0 = GDT_OFF_DATA_0_DESC;
 	tss_tn->ss = GDT_OFF_DATA_3_DESC;
