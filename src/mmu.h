@@ -31,7 +31,7 @@ extern page_entries_set* PDE;
 void mmu_inicializar();
 void mmu_inicializar_dir_kernel();
 unsigned int mmu_proxima_pagina_fisica_libre();
-void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica);
+void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica, unsigned int user);
 unsigned int mmu_inicializar_dir_tarea();
 
 #endif	/* !__MMU_H__ */
