@@ -48,6 +48,8 @@
 #define GDT_OFF_CODE_3_DESC			(GDT_IDX_CODE_3_DESC 	<< 3)
 #define GDT_OFF_DATA_0_DESC			(GDT_IDX_DATA_0_DESC 	<< 3)
 #define GDT_OFF_DATA_3_DESC			(GDT_IDX_DATA_3_DESC 	<< 3)
+#define GDT_OFF_VIDEO_DESC			(GDT_VIDEO_DESC 		<< 3)
+
 /* Jugadores */
 /* -------------------------------------------------------------------------- */
 #define JUG_A	0

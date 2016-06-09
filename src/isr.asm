@@ -133,9 +133,9 @@ _isr32:
     cmp ax, 0
     je  .end
         mov [sched_tarea_selector], ax
-        xchg bx, bx
+        xchg bx,bx
         jmp far [sched_tarea_offset]
-        xchg bx, bx
+        
 	    jmp .end
 	
 	.end:

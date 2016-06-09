@@ -114,9 +114,9 @@ start:
 
 
     ; Inicializar tss
-
     ; Inicializar tss de la tarea Idle
     call tss_inicializar
+
     ; Inicializar el scheduler
 
     ; Inicializar la IDT
@@ -130,19 +130,20 @@ start:
     call habilitar_pic
 
     ; Cargar tarea inicial
+    mov ax,0x48;Tarea inicial
+    ltr ax
 
     call game_inicializar
+    call screen_inicializar
 
     ; Habilitar interrupciones
     sti
     
-    call screen_inicializar
+    ;call screen_inicializar
     ;call mostrar_pantallita
 
     ; Saltar a la primera tarea: Idle
-    mov ax,1001000b ;Tarea inicial
-    ltr ax
-    jmp 1010000b:0x69 ;Idle
+    jmp 0x50:0x69 ;Idle
 
     ; Ciclar infinitamente (por si algo sale mal...)
 

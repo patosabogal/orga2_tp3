@@ -9,9 +9,9 @@
 
 #define INTERRUPCIONES 	0x00000200
 #define PORQUESI 		0x00000002
+#define USER_SEG        0x3
 tss tss_inicial;
 tss tss_idle;
-
 
 void tss_inicializar() {
 	gdt[GDT_TSS_INICIAL] = (gdt_entry) {     // descriptor de tss inicial
@@ -29,6 +29,7 @@ void tss_inicializar() {
         (unsigned char)     0x00,                  /* g            */
 		(unsigned int)     	&tss_inicial >> 24,    /* base[31:24]  */
     };
+
     gdt[GDT_TSS_IDLE] = (gdt_entry) {     // descriptor de tss idle
         (unsigned short)    sizeof(tss)-1,         /* limit[0:15]  */
 		(unsigned int)		&tss_idle,             /* base[0:15]   */
@@ -50,12 +51,12 @@ void tss_inicializar() {
     tss_idle.esp = KERNEL_BASE_STACK;
     //tss_idle.esp0 = KERNEL_BASE_STACK;
     //tss_idle.ss0 = 0x30;
-    tss_idle.cs = 0x20;
-    tss_idle.ss = 0x30;
-    tss_idle.ds = 0x30;
-    tss_idle.es = 0x30;
-    tss_idle.gs = 0x30;
-    tss_idle.fs = 0x40;
+    tss_idle.cs = GDT_OFF_CODE_0_DESC;
+    tss_idle.ss = GDT_OFF_DATA_0_DESC;
+    tss_idle.ds = GDT_OFF_DATA_0_DESC;
+    tss_idle.es = GDT_OFF_DATA_0_DESC;
+    tss_idle.gs = GDT_OFF_DATA_0_DESC;
+    tss_idle.fs = GDT_OFF_VIDEO_DESC;
     tss_idle.cr3 = PAGE_DIRECTORY_BASE;
     tss_idle.eflags |= (PORQUESI | INTERRUPCIONES);
 
@@ -80,11 +81,12 @@ unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 	
 	tss* tss_tn = (tss*) mmu_proxima_pagina_fisica_libre();
 	unsigned int i = 0;
-    unsigned short* p = (unsigned short*) tss_tn;
+    unsigned char* p = (unsigned char*) tss_tn;
     while(i < sizeof(tss)){
         p[i] = 0;
         i++;
     }
+
 	unsigned int pila0 = mmu_proxima_pagina_fisica_libre() + PAGE_SIZE;
 	unsigned int cr3 = mmu_inicializar_dir_tarea(codigo, x, y);
 
@@ -93,20 +95,20 @@ unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 	tss_tn->esp = BASE_PILA_TAREA;
 	tss_tn->esp0 = pila0;
 	tss_tn->ss0 = GDT_OFF_DATA_0_DESC;
-	tss_tn->ss = GDT_OFF_DATA_3_DESC;
-	tss_tn->ds = GDT_OFF_DATA_3_DESC;
-	tss_tn->gs = GDT_OFF_DATA_3_DESC;
-	tss_tn->fs = GDT_OFF_DATA_3_DESC;
-	tss_tn->es = GDT_OFF_DATA_3_DESC;
-
-	tss_tn->cs = GDT_OFF_CODE_3_DESC;
+	tss_tn->ss = GDT_OFF_DATA_3_DESC | USER_SEG;
+	tss_tn->ds = GDT_OFF_DATA_3_DESC | USER_SEG;
+	tss_tn->gs = GDT_OFF_DATA_3_DESC | USER_SEG;
+	tss_tn->fs = GDT_OFF_DATA_3_DESC | USER_SEG;
+	tss_tn->es = GDT_OFF_DATA_3_DESC | USER_SEG;
+	tss_tn->cs = GDT_OFF_CODE_3_DESC | USER_SEG;
     
+
 	tss_tn->cr3 = cr3;
 	tss_tn->eflags |= (PORQUESI | INTERRUPCIONES);
 
 	gdt[disp] = (gdt_entry) {
         (unsigned short)    sizeof(tss)-1,	/* limit[0:15]  */
-		(unsigned int)		tss_tn,         /* base[0:15]   */
+		(unsigned int)      tss_tn,         /* base[0:15]   */
 		(unsigned int)		tss_tn >> 16,	/* base[23:16]  */
         (unsigned char)     0x09,           /* type         */
         (unsigned char)     0x00,           /* s            */
@@ -117,7 +119,7 @@ unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
         (unsigned char)     0x00,           /* l            */
         (unsigned char)     0x01,           /* db           */
         (unsigned char)     0x00,           /* g            */
-		(unsigned int)    	tss_tn >> 24,   /* base[31:24]  */
+		(unsigned int)    	tss_tn >> 24,  /* base[31:24]  */
     };
 
     unsigned short _selector_tss =  (disp << 3);

@@ -21,7 +21,7 @@ typedef struct str_tarea{
 	unsigned int x;
 	unsigned int y;
 	unsigned short vivo;
-	unsigned short zuzia;
+	id virus;
 	unsigned short selector_tss;
 } tarea;
 
@@ -30,14 +30,14 @@ typedef struct str_jugador{
 	unsigned int puntos;
 	unsigned int x;
 	unsigned int y;
-	unsigned short actual;
+	unsigned short proxima;
 	tarea tareas[5];
 } jugador;
 
 typedef struct str_game_state{
 	jugador js[2];
 	tarea iniciales[15];
-	unsigned short actualSana;
+	unsigned short proximaSana;
 	id corriendo;
 } game_state;
 

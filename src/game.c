@@ -27,7 +27,7 @@ void game_inicializar(){
 		0,		// puntos
 		0,		// x inicial
 		1,		// y inicial
-		0		// Tarea Actual
+		0		// Tarea Siguiente
 	};
 
 	jugador jug_B = {
@@ -35,11 +35,13 @@ void game_inicializar(){
 		0,		// puntos
 		79,		// x inicial
 		1,		// y inicial
-		0		// Tarea Actual
+		0		// Tarea Siguiente
 	};
 
 	GAME.js[A] = jug_A;
 	GAME.js[B] = jug_B;
+	GAME.proximaSana = 0;
+	GAME.corriendo = H;
 
 	game_inicializar_tareas_iniciales();
 	game_inicializar_tareas_jugadores();
@@ -47,7 +49,7 @@ void game_inicializar(){
 
 void game_inicializar_tareas_iniciales(){
 	int i;
-	for (i = 0; i < 15; ++i)
+	for (i = 0; i < 1; ++i)
 	{
 		GAME.iniciales[i] = nueva_tarea((unsigned int *)CODIGO_TAREA_H, 16+i, 16-i);
 	}
@@ -69,7 +71,7 @@ tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y){
 	new_task.x = x;
 	new_task.y = y;
 	new_task.vivo = TRUE;
-	new_task.zuzia = H;
+	new_task.virus = H;
 	new_task.selector_tss = _selector_tss;
 
 	return new_task;
