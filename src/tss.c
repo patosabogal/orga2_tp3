@@ -75,20 +75,19 @@ unsigned int tss_entrada_disponible(){
 	return i;
 }
 
-unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
+void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y, unsigned short* segmento, unsigned int* cr3){
 	// codigo = (unsigned int*) 0x11000;
 	unsigned int disp = tss_entrada_disponible();
-	
-	tss* tss_tn = (tss*) mmu_proxima_pagina_fisica_libre();
-	unsigned int i = 0;
+    tss* tss_tn = (tss*) mmu_proxima_pagina_fisica_libre();
+    unsigned int i = 0;
     unsigned char* p = (unsigned char*) tss_tn;
     while(i < sizeof(tss)){
         p[i] = 0;
         i++;
     }
 
-	unsigned int pila0 = mmu_proxima_pagina_fisica_libre() + PAGE_SIZE;
-	unsigned int cr3 = mmu_inicializar_dir_tarea(codigo, x, y);
+    unsigned int pila0 = mmu_proxima_pagina_fisica_libre() + PAGE_SIZE;
+    unsigned int _cr3 = mmu_inicializar_dir_tarea(codigo, x, y);
 
 	tss_tn->eip = CODIGO; //Direccion de codigo mapeada a codigo de la tarea
 	tss_tn->ebp = BASE_PILA_TAREA;
@@ -103,7 +102,7 @@ unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 	tss_tn->cs = GDT_OFF_CODE_3_DESC | USER_SEG;
     
 
-	tss_tn->cr3 = cr3;
+	tss_tn->cr3 = _cr3;
 	tss_tn->eflags |= (PORQUESI | INTERRUPCIONES);
 
 	gdt[disp] = (gdt_entry) {
@@ -122,7 +121,7 @@ unsigned short tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y){
 		(unsigned int)    	tss_tn >> 24,  /* base[31:24]  */
     };
 
-    unsigned short _selector_tss =  (disp << 3);
-    return _selector_tss;
-
+    //unsigned short _selector_tss =  (disp << 3);
+    *segmento = (disp << 3);
+    *cr3 = _cr3;
 }

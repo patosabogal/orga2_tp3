@@ -34,7 +34,7 @@ idt_descriptor IDT_DESC = {
 */
 
 
-#define IDT_ENTRY(numero)\
+#define IDT_ENTRY(numero,dpl)\
     idt[numero].offset_0_15 = (unsigned short) ((unsigned int)(&_isr ## numero) & (unsigned int) 0xFFFF);\
     idt[numero].segsel = (unsigned short) 0x20;\
     idt[numero].attr = (unsigned short) 0x0470 << 5;\
@@ -42,26 +42,26 @@ idt_descriptor IDT_DESC = {
 
 //BANANITA DOLCA
 void idt_inicializar() {
-    IDT_ENTRY(0)
-    IDT_ENTRY(2)
-    IDT_ENTRY(3)
-    IDT_ENTRY(4)
-    IDT_ENTRY(5)
-    IDT_ENTRY(6)
-    IDT_ENTRY(7)
-    IDT_ENTRY(8)
-    IDT_ENTRY(9)
-    IDT_ENTRY(10)
-    IDT_ENTRY(11)
-    IDT_ENTRY(12)
-    IDT_ENTRY(13)
-    IDT_ENTRY(14)
-    IDT_ENTRY(16)
-    IDT_ENTRY(17)
-    IDT_ENTRY(18)
-    IDT_ENTRY(19)
+    IDT_ENTRY(0,0)
+    IDT_ENTRY(2,0)
+    IDT_ENTRY(3,0)
+    IDT_ENTRY(4,0)
+    IDT_ENTRY(5,0)
+    IDT_ENTRY(6,0)
+    IDT_ENTRY(7,0)
+    IDT_ENTRY(8,0)
+    IDT_ENTRY(9,0)
+    IDT_ENTRY(10,0)
+    IDT_ENTRY(11,0)
+    IDT_ENTRY(12,0)
+    IDT_ENTRY(13,0)
+    IDT_ENTRY(14,0)
+    IDT_ENTRY(16,0)
+    IDT_ENTRY(17,0)
+    IDT_ENTRY(18,0)
+    IDT_ENTRY(19,0)
 
-    IDT_ENTRY(32)   // inicializar descriptor interrupcion reloj
-    IDT_ENTRY(33)   // inicializar descriptor interrupcion teclado
-    IDT_ENTRY(102)   // inicializar descriptor interrupcion syscall
+    IDT_ENTRY(32,0)   // inicializar descriptor interrupcion reloj
+    IDT_ENTRY(33,0)   // inicializar descriptor interrupcion teclado
+    IDT_ENTRY(102,3)   // inicializar descriptor interrupcion syscall
 }

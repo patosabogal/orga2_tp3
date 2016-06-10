@@ -15,5 +15,4 @@
 
 unsigned short sched_proximo_indice();
 
-
 #endif	/* !__SCHED_H__ */

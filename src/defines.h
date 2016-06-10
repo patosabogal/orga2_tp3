@@ -19,7 +19,7 @@
 /* Misc */
 /* -------------------------------------------------------------------------- */
 #define CANT_H                 	   15
-#define CANT                    	5
+#define CANT_TAREAS_J               5
 #define SIZE_W                     80
 #define SIZE_H                     44
 #define PAGE_SIZE			0x00001000
@@ -50,16 +50,13 @@
 #define GDT_OFF_DATA_3_DESC			(GDT_IDX_DATA_3_DESC 	<< 3)
 #define GDT_OFF_VIDEO_DESC			(GDT_VIDEO_DESC 		<< 3)
 
-/* Jugadores */
-/* -------------------------------------------------------------------------- */
-#define JUG_A	0
-#define JUG_B	1
 
 /* Direcciones de memoria */
 /* -------------------------------------------------------------------------- */
 #define VIDEO_SCREEN			0x000B8000	/* direccion fisica del buffer de video */
 #define MAPA					0x400000 	/* direccion fisica del mapa */
 #define CODIGO					0x8000000 	/* direccion logica de codigo de tarea */
+#define CODIGO_MAPEADO			0x8001000   /* direccion logica de pagina mapeada de tarea */
 #define BASE_PILA_TAREA			0x8001000	/* direccion logica de la base de la pila de la tarea */
 #define KERNEL_BASE_STACK		0x27000
 #define PAGE_DIRECTORY_BASE		0x27000

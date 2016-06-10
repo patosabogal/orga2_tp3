@@ -128,9 +128,8 @@ void actualizar_display_tareas(){
     for (i = 0; i < 5; ++i){
         tarea _tareaA = GAME.js[A].tareas[i];
         tarea _tareaB = GAME.js[B].tareas[i];
-
         if (_tareaA.vivo ) print(" ", _tareaA.x, _tareaA.y, C_FG_WHITE | C_BG_RED);
-        if (_tareaB.vivo ) print(" ", _tareaB.x, _tareaB.y, C_FG_WHITE | C_BG_RED);
+        if (_tareaB.vivo ) print(" ", _tareaB.x, _tareaB.y, C_FG_WHITE | C_BG_BLUE);
     }
 }
 

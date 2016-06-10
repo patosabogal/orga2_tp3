@@ -9,9 +9,7 @@
 #define PDE_INDEX(virtu) virtu >> 22
 #define PTE_INDEX(virtu) (virtu << 10) >> 22
 //#define ALIGN(dir)         
-#define PG_READ_WRITE	0x00000002
-#define PG_USER			0x00000004
-#define PG_PRESENT		0x00000001
+
 
 
 pila pila_libres;
@@ -122,9 +120,7 @@ unsigned int pointToAddr(unsigned int x,unsigned int y){
 }
 
 unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, unsigned int y){
- 	//NUEVO DIRECTORIO DE PAGINA PARA MI NUEVA TAREA
  	page_entries_set* pd = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
- 	//page_entries_set* pt = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
  	unsigned int i = 0;
 	while(i < 1024){
 		pd->page_entries[i].attr = 0;
@@ -138,42 +134,18 @@ unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, uns
 		i++;
 	}
 
-	/*i = 0;
-	unsigned int wr_p = PG_READ_WRITE | PG_PRESENT;
-	while (i < 1024){ 
-		pd->page_entries[i].attr = 0;
-		pt->page_entries[i].attr = wr_p;
-		pt->page_entries[i].base_page_addr = i;
-		i++;
-	}
-	pd->page_entries[0].attr = wr_p;
-	pd->page_entries[0].base_page_addr = (unsigned int) pt >> 12;*/
-
 	//CODIGO EN LA 8kk
 	unsigned int* addr = (unsigned int*) pointToAddr(x,y);
 	mmu_mapear_pagina(CODIGO,(unsigned int) pd,(unsigned int) addr, PG_USER);
-/*
-	pt = (page_entries_set*) mmu_proxima_pagina_fisica_libre();
-	unsigned int pde_int = PDE_INDEX(CODIGO);
-	pd->page_entries[pde_int].attr |= (PG_PRESENT | PG_READ_WRITE | PG_USER);
-	pd->page_entries[pde_int].base_page_addr = (unsigned int) pt >> 12;
-
-	unsigned int pte_int = PTE_INDEX(CODIGO);
-	pt->page_entries[pte_int].attr |= (PG_PRESENT | PG_READ_WRITE | PG_USER);
-
-	unsigned int* addr = (unsigned int*) pointToAddr(x,y);
-	pt->page_entries[pte_int].base_page_addr = ((unsigned int) addr) >> 12;
-
-*/
 	//MAPEO EN EL KERNEL LA DIRECCION TAMBIEN
-	mmu_mapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE,(unsigned int) addr,0);
+	mmu_mapear_pagina((unsigned int) addr,rcr3(),(unsigned int) addr,0);
 	i = 0;
 	//Copio int a int
 	while(i < 1024){
 		addr[i] = codigo[i];
 		i++;
 	}
-	mmu_unmapear_pagina((unsigned int) addr,PAGE_DIRECTORY_BASE);
+	mmu_unmapear_pagina((unsigned int) addr,rcr3());
 		
 	return (unsigned int) pd;
 }

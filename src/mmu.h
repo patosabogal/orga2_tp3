@@ -14,6 +14,11 @@
 #include "game.h"
 #include "screen.h"
 #include "pila.h"
+
+#define PG_READ_WRITE	0x00000002
+#define PG_USER			0x00000004
+#define PG_PRESENT		0x00000001
+  
 typedef struct str_page_entry{
 	unsigned int	attr:12;
 	unsigned int	base_page_addr:20;
@@ -33,6 +38,7 @@ void mmu_inicializar_dir_kernel();
 unsigned int mmu_proxima_pagina_fisica_libre();
 void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica, unsigned int user);
 unsigned int mmu_inicializar_dir_tarea();
+unsigned int pointToAddr(unsigned int x,unsigned int y);
 
 #endif	/* !__MMU_H__ */
 

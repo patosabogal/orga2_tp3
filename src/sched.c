@@ -25,13 +25,13 @@ unsigned short _tiene_vivos(id _id){
 	unsigned short _algun_vivo = 0;
 	if (_id == H) {
 		int i = 0;
-		while(i < 15 && _algun_vivo == 0) {
+		while(i < CANT_H && _algun_vivo == 0) {
 			_algun_vivo = GAME.iniciales[i].vivo;
 			i++;
 		}
 	} else {
 		int i = 0;
-		while(i < 5 && _algun_vivo == 0){
+		while(i < CANT_TAREAS_J && _algun_vivo == 0){
 			_algun_vivo = GAME.js[_id].tareas[i].vivo;
 			i++;
 		}
@@ -42,37 +42,42 @@ unsigned short _tiene_vivos(id _id){
 
 void _proximaSana(){
 	do{
-		GAME.proximaSana ++;
-		if(GAME.proximaSana >= 15) GAME.proximaSana = 0;
-	}while(GAME.iniciales[GAME.proximaSana].vivo == 0);
+		GAME.actual++;
+		if(GAME.actual >= CANT_H) GAME.actual = 0;
+	}while(GAME.iniciales[GAME.actual].vivo == 0);
 }
 
 void _proximaJug(id _id){
 	jugador* j = &(GAME.js[_id]);
 	do{
-		j->proxima ++;
-		if(j->proxima >= 15) j->proxima = 0;
-	}while(j->tareas[j->proxima].vivo == 0);
+		j->actual++;
+		if(j->actual >= CANT_TAREAS_J) j->actual = 0;
+	}while(j->tareas[j->actual].vivo == 0);
 }
 
 unsigned short _selector_proxima_tarea(id _id){
 	unsigned short _siguiente_selector;
-	
 	if (_id == H) {
-		unsigned int prox = GAME.proximaSana;
-		_siguiente_selector = GAME.iniciales[GAME.proximaSana].selector_tss;
+		unsigned int _actual_selector = GAME.tareaActual->selector_tss;
 		_proximaSana();
+		GAME.tareaActual = &GAME.iniciales[GAME.actual];
+		_siguiente_selector = GAME.tareaActual->selector_tss;
 
-		if (prox == GAME.proximaSana){
+		if(_siguiente_selector == _actual_selector){
 			_siguiente_selector = 0;
 		}
-
 	} else {
-		unsigned int prox = GAME.js[_id].proxima;
-		_siguiente_selector = GAME.js[_id].tareas[prox].selector_tss;
+		//print_int(GAME.js[_id].actual,50,0,C_FG_WHITE | C_BG_CYAN);
 		_proximaJug(_id);
+		
+		unsigned int _actual_selector = GAME.tareaActual->selector_tss;
+		unsigned int actual = GAME.js[_id].actual;
+		
 
-		if (prox == GAME.js[_id].proxima){
+		GAME.tareaActual = &GAME.js[_id].tareas[actual];
+		_siguiente_selector = GAME.tareaActual->selector_tss;
+		
+		if(_siguiente_selector == _actual_selector){
 			_siguiente_selector = 0;
 		}
 	}

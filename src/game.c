@@ -5,21 +5,54 @@
 */
 
 #include "game.h"
+#define INF_ROJO 0x841
+#define INF_AZUL 0x325
 
 game_state GAME;
 unsigned int DEBUG_MODE = FALSE;
 
-void game_lanzar(unsigned int jugador) {
+void game_lanzar(id j) {
+	unsigned int x = GAME.js[j].x;
+	unsigned int y = GAME.js[j].y;
+	unsigned int* codigo;
+
+	if(j == A){
+		codigo = (unsigned int*)CODIGO_TAREA_B;
+	}else{
+		codigo = (unsigned int*)CODIGO_TAREA_A;
+	}
+
+	int i = 0;
+	while(i < CANT_TAREAS_J && GAME.js[j].tareas[i].vivo){
+		i++;
+	}
+	
+	if(i != CANT_TAREAS_J){
+		GAME.js[j].tareas[i] = nueva_tarea(codigo,x,y,j);
+	}
 }
 
 void game_soy(unsigned int yoSoy) {
+	switch(yoSoy){
+		case INF_ROJO:
+			GAME.tareaActual->virus = A;
+			break;
+		case INF_AZUL:
+			GAME.tareaActual->virus = B;
+			break;
+	}
 }
 
-void game_donde(unsigned int* pos) {	
+void game_donde(unsigned int* pos) {
+	//print_int(GAME.tareaActual->x, 57, 47, C_FG_WHITE | C_BG_BLUE);
+	pos[0] = GAME.tareaActual->x;
+	pos[1] = GAME.tareaActual->y;
 }
 
 void game_mapear(unsigned int x,unsigned int y) {
+	mmu_mapear_pagina(CODIGO_MAPEADO,GAME.tareaActual->cr3,pointToAddr(x,y),PG_USER);
 }
+
 
 void game_inicializar(){
 	jugador jug_A = {
@@ -27,7 +60,7 @@ void game_inicializar(){
 		0,		// puntos
 		0,		// x inicial
 		1,		// y inicial
-		0		// Tarea Siguiente
+		0		// Tarea Actual
 	};
 
 	jugador jug_B = {
@@ -35,12 +68,12 @@ void game_inicializar(){
 		0,		// puntos
 		79,		// x inicial
 		1,		// y inicial
-		0		// Tarea Siguiente
+		0		// Tarea Actual
 	};
 
 	GAME.js[A] = jug_A;
 	GAME.js[B] = jug_B;
-	GAME.proximaSana = 0;
+	GAME.actual = 0;
 	GAME.corriendo = H;
 
 	game_inicializar_tareas_iniciales();
@@ -49,32 +82,33 @@ void game_inicializar(){
 
 void game_inicializar_tareas_iniciales(){
 	int i;
-	for (i = 0; i < 1; ++i)
+	for (i = 0; i < CANT_H; ++i)
 	{
-		GAME.iniciales[i] = nueva_tarea((unsigned int *)CODIGO_TAREA_H, 16+i, 16-i);
+		GAME.iniciales[i] = nueva_tarea((unsigned int *)CODIGO_TAREA_H, 16+i, 16-i,H);
 	}
 }
 
 void game_inicializar_tareas_jugadores(){
 	int i;
-	for (i = 0; i < 5; ++i)
+	for (i = 0; i < CANT_TAREAS_J; ++i)
 	{
 		GAME.js[A].tareas[i].vivo = FALSE;
 		GAME.js[B].tareas[i].vivo = FALSE;
 	}
 }
 
-tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y){
-	unsigned short _selector_tss = tss_nueva(codigo, x, y);
-	tarea new_task;
-
-	new_task.x = x;
-	new_task.y = y;
-	new_task.vivo = TRUE;
-	new_task.virus = H;
-	new_task.selector_tss = _selector_tss;
-
-	return new_task;
+tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y, id tipo){
+	unsigned short _selector_tss = 0;
+	unsigned int _cr3 = 0;
+	tss_nueva(codigo, x, y, &_selector_tss, &_cr3);
+	tarea nueva_tarea;
+	nueva_tarea.x = x;
+	nueva_tarea.y = y;
+	nueva_tarea.vivo = TRUE;
+	nueva_tarea.virus = tipo;
+	nueva_tarea.selector_tss = _selector_tss;
+	nueva_tarea.cr3 = _cr3;
+	return nueva_tarea;
 }
 
 void atender_teclado(const char tecla_fea){
@@ -107,11 +141,11 @@ void atender_teclado(const char tecla_fea){
 			game_mover_cursor(&GAME.js[B], derecha);
 			break;
 		case 0x2a:	// LShift
-			game_mover_cursor(&GAME.js[B], derecha);
+			game_lanzar(A);
 			// Lanzar tarea
 			break;
 		case 0x36:	// RShift
-			game_mover_cursor(&GAME.js[B], derecha);
+			game_lanzar(B);
 			// Lanzar tarea
 			break;			
 		case 0x15:	// Y

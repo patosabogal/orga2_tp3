@@ -130,12 +130,11 @@ _isr32:
     call fin_intr_pic1
     call proximo_reloj
     call sched_proximo_indice
+    ;mov ax,0
     cmp ax, 0
     je  .end
         mov [sched_tarea_selector], ax
-        xchg bx,bx
         jmp far [sched_tarea_offset]
-        
 	    jmp .end
 	
 	.end:
@@ -147,6 +146,7 @@ _isr32:
 
 global _isr33
 _isr33:
+
     pushad
     in al, 0x60
     push eax
@@ -173,31 +173,31 @@ _isr33:
 
 global _isr102
 _isr102:
-    pushad
-    push ebx
+    ;pushad
+    ;push ebx
 
-    cmp eax,DONDE
-    jne .SOY
-    
-    call game_donde
+    ;cmp eax,DONDE
+    ;jne .MELLAMARONMAL
+    ;call game_donde
 
-    .SOY:
-    cmp eax,SOY
-    jne .MAPEAR
-    call game_soy
+    ; .SOY:
+    ; cmp eax,SOY
+    ; jne .MAPEAR
+    ; call game_soy
 
-    .MAPEAR:
-    cmp eax, MAPEAR
-    jne .MELLAMARONMAL
-    push ecx
-    call game_mapear
-    pop ecx
 
-    .MELLAMARONMAL:
-    mov dword [esp + ADDR_SIZE*OFFSET_ECX], 0x42
+    ; .MAPEAR:
+    ; cmp eax, MAPEAR
+    ; jne .MELLAMARONMAL
+    ; push ecx
+    ; call game_mapear
+    ; pop ecx
 
-    pop ebx
-    popad
+    ;.MELLAMARONMAL:
+    ;mov dword [esp + ADDR_SIZE*OFFSET_ECX], 0x42
+
+    ;pop ebx
+    ;popad
     iret
 
 ;; Funciones Auxiliares

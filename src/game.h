@@ -22,6 +22,8 @@ typedef struct str_tarea{
 	unsigned int y;
 	unsigned short vivo;
 	id virus;
+
+	unsigned int cr3;
 	unsigned short selector_tss;
 } tarea;
 
@@ -30,21 +32,22 @@ typedef struct str_jugador{
 	unsigned int puntos;
 	unsigned int x;
 	unsigned int y;
-	unsigned short proxima;
+	unsigned short actual;
 	tarea tareas[5];
 } jugador;
 
 typedef struct str_game_state{
 	jugador js[2];
 	tarea iniciales[15];
-	unsigned short proximaSana;
+	unsigned short actual;
 	id corriendo;
+	tarea* tareaActual;
 } game_state;
 
 // typedef enum direccion_e { IZQ = 0xAAA, DER = 0x441, ARB = 0xA33, ABA = 0x883  } direccion;
 typedef enum enum_direccion {arriba, abajo, derecha, izquierda} direccion;
 
-void game_lanzar(unsigned int jugador);
+//void game_lanzar(unsigned int jugador);
 
 void game_mapear(unsigned int x, unsigned y);
 void game_soy(unsigned int soy);
@@ -56,7 +59,7 @@ void game_inicializar();
 
 void atender_teclado(char tecla);
 
-tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y);
+tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y, id tipo);
 
 void game_inicializar_tareas_iniciales();
 
