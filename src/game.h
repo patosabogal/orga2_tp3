@@ -22,7 +22,7 @@ typedef struct str_tarea{
 	unsigned int y;
 	unsigned short vivo;
 	id virus;
-
+	unsigned char reloz;
 	unsigned int cr3;
 	unsigned short selector_tss;
 } tarea;

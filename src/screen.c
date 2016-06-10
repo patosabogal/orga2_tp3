@@ -21,6 +21,13 @@ void print(const char * text, unsigned int x, unsigned int y, unsigned short att
     }
 }
 
+void print_char(unsigned char c, unsigned int x, unsigned int y, unsigned short attr) {
+    ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO_SCREEN;
+        p[y][x].c = (unsigned char) c;
+        p[y][x].a = (unsigned char) attr;
+}
+
+
 void print_hex(unsigned int numero, int size, unsigned int x, unsigned int y, unsigned short attr) {
     ca (*p)[VIDEO_COLS] = (ca (*)[VIDEO_COLS]) VIDEO_SCREEN;
     int i;
@@ -64,6 +71,23 @@ void pintar_rectangulo(unsigned int x, unsigned int y, unsigned int cant_x, unsi
     }
 }
 
+void actualizar_display_relozJ(){
+    unsigned int i = 0;
+    while(i<5){
+        if(GAME.js[A].tareas[i].vivo) print_char(GAME.js[A].tareas[i].reloz,2+2*i,46,C_FG_WHITE | C_BG_BLACK);
+        if(GAME.js[B].tareas[i].vivo) print_char(GAME.js[B].tareas[i].reloz, 24+2*i,46,C_FG_WHITE | C_BG_BLACK);
+        i++;
+    }
+}
+
+void actualizar_display_relozS(){
+    unsigned int i = 0;
+    while(i<15){
+        if(GAME.iniciales[i].vivo) print_char(GAME.iniciales[i].reloz,2+2*i,48,C_FG_WHITE | C_BG_BLACK);
+        i++;
+    }
+}
+
 void screen_inicializar(){
     actualizar_dislpay_estatico();
     escribir_nombre_grupo();
@@ -90,6 +114,7 @@ void actualizar_dislpay_estatico(){
     print("vidas", 41, 46, C_FG_WHITE | C_BG_BLACK);
     print("vidas", 62, 46, C_FG_WHITE | C_BG_BLACK);
 }
+
 
 void actualizar_display_vidas(){
     print_int(GAME.js[A].vidas, 43, 48, C_FG_WHITE | C_BG_BLACK);
@@ -184,16 +209,4 @@ void mostrar_pantallita(unsigned short virus){
     // print_Cregistro("gs",28,36);
     // print_Cregistro("ss",28,38);
     // print_Eflags("eflags",27,40);
-}
-
-// void print_registro32(const char* registro,short x,short y){
-//     register int i asm("eax");
-//     print(registro, x, y, C_FG_BLACK | C_BG_LIGHT_GREY);
-//     print_hex(i,8, x+4, y, C_FG_WHITE | C_BG_LIGHT_GREY);
-// }
-
-// void print_Cregistro(const char*registro, short x, short y){
-//     register int i asm("eax");
-//     print(registro, x, y, C_FG_BLACK | C_BG_LIGHT_GREY);
-//     print_hex(i,8, x+4, y, C_FG_WHITE | C_BG_LIGHT_GREY);
-// }
+} 
