@@ -101,18 +101,30 @@ void mmu_unmapear_pagina(unsigned int virtu, unsigned int cr3){
 	unsigned int pt_ind = PTE_INDEX(virtu);
 	pt->page_entries[pt_ind].attr = 0;
 
-	mmu_liberar_pagina(pd->page_entries[pd_ind].base_page_addr << 12);
 	//Si la pt esta vacia hay que limpiar la pd en esa posicion
 	if(tablaVacia(pt)){
 		pd->page_entries[pd_ind].attr = 0;
-		// ¿En este caso no habría que liberar la página asociada a la tabla para ser consistentes?
-		// Porque cuando mapeamos le damos una nueva página si esta en 0 el bit de presente
+		mmu_liberar_pagina((unsigned int) pt);
 	}
 	if(tablaVacia(pd)){
 		mmu_liberar_pagina((unsigned int) pd);
 	}
 
 	tlbflush();
+}
+
+void mmu_liberar_directorio(unsigned int cr3){
+
+	page_entries_set* pd = (page_entries_set*) cr3;
+	unsigned int i = 0;
+	while(i < 1024){
+		if(pd->page_entries[i].attr & PG_PRESENT){
+			page_entries_set* pt = (page_entries_set*) (pd->page_entries[i].base_page_addr << 12);
+			mmu_liberar_pagina((unsigned int) pt);
+		}
+		i++;
+	}
+	mmu_liberar_pagina((unsigned int) pd);
 }
 
 unsigned int pointToAddr(unsigned int x,unsigned int y){

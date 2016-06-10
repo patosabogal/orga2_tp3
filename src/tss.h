@@ -57,6 +57,7 @@ typedef struct str_tss {
 
 void tss_inicializar();
 void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y, unsigned short* segmento, unsigned int* cr3);
+void tss_matar(unsigned short segmento);
 
 extern tss tss_inicial;
 extern tss tss_idle;

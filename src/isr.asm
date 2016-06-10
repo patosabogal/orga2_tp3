@@ -4,11 +4,6 @@
 ; ==============================================================================
 ; definicion de rutinas de atencion de interrupciones
 
-extern screen_inicializar
-extern atender_teclado
-extern game_mapear
-extern game_donde
-extern game_soy
 
 ADDR_SIZE   equ 4
 OFFSET_ECX  equ 7
@@ -27,6 +22,13 @@ extern screen_proximo_reloj
 ;; Sched
 extern sched_proximo_indice
 
+;; Game
+extern screen_inicializar
+extern atender_teclado
+extern game_mapear
+extern game_donde
+extern game_soy
+extern game_matar
 
 intmsg0: db 'Divide Error'
 intlen0 equ    $ - intmsg0
@@ -68,10 +70,6 @@ intmsg19: db 'SIMD Floating-Point Exception'
 intlen19 equ    $ - intmsg19
 
 
-      
-offset: dd 0
-selector: dw 0
-
 
 ;;
 ;; Definición de MACROS
@@ -83,7 +81,12 @@ global _isr%1
 _isr%1:
     mov eax, %1
     imprimir_texto_mp intmsg%1, intlen%1, 0x07, 0, 0
-    jmp $
+    call game_matar
+    mov ax,0x48;Tarea inicial dummy
+    ltr ax
+
+    sti
+    jmp 0x50:0x69 ;Idle
 %endmacro
 
 ;;

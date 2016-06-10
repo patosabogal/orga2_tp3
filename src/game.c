@@ -55,8 +55,15 @@ void game_mapear(unsigned int x,unsigned int y) {
 	}
 	
 	mmu_mapear_pagina(CODIGO_MAPEADO,GAME.tareaActual->cr3,pointToAddr(x,y),PG_USER);
+	GAME.tareaActual->x_map = x;
+	GAME.tareaActual->y_map = x;
+	GAME.tareaActual->map = TRUE;
 }
 
+void game_matar(){
+	GAME.tareaActual->vivo = FALSE;
+	tss_matar(GAME.tareaActual->selector_tss);
+}
 
 void game_inicializar(){
 	jugador jug_A = {
@@ -106,6 +113,10 @@ tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y, id tipo)
 	tarea nueva_tarea;
 	nueva_tarea.x = x;
 	nueva_tarea.y = y;
+	nueva_tarea.x_map = 0;
+	nueva_tarea.y_map = 0;
+	nueva_tarea.map = FALSE;
+
 	nueva_tarea.vivo = TRUE;
 	nueva_tarea.virus = tipo;
 	nueva_tarea.selector_tss = _selector_tss;

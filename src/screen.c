@@ -72,6 +72,7 @@ void screen_inicializar(){
     actualizar_display_tareas();
     actualizar_display_cursores();
     actualizar_display_debug_mode();
+    actualizar_display_mapeadas();
 }
 
 void escribir_nombre_grupo(){
@@ -138,20 +139,31 @@ void actualizar_display_debug_mode(){
 
 void actualizar_display_tareas(){
     int i;
-    for (i = 0; i < 15; ++i)
+    for (i = 0; i < CANT_H; ++i)
     {
-        tarea _tarea = GAME.iniciales[i];
+        tarea* _tarea = &GAME.iniciales[i];
 
-        if (_tarea.vivo) print(" ", _tarea.x, _tarea.y, C_FG_WHITE | C_BG_GREEN);
+        if (_tarea->vivo) print(" ", _tarea->x, _tarea->y, C_FG_WHITE | C_BG_GREEN);
     }
 
-    for (i = 0; i < 5; ++i){
-        tarea _tareaA = GAME.js[A].tareas[i];
-        tarea _tareaB = GAME.js[B].tareas[i];
-        if (_tareaA.vivo ) print(" ", _tareaA.x, _tareaA.y, C_FG_WHITE | C_BG_RED);
-        if (_tareaB.vivo ) print(" ", _tareaB.x, _tareaB.y, C_FG_WHITE | C_BG_BLUE);
+    for (i = 0; i < CANT_TAREAS_J; ++i){
+        tarea* _tareaA = &GAME.js[A].tareas[i];
+        tarea* _tareaB = &GAME.js[B].tareas[i];
+        if (_tareaA->vivo ) print(" ", _tareaA->x, _tareaA->y, C_FG_WHITE | C_BG_RED);
+        if (_tareaB->vivo ) print(" ", _tareaB->x, _tareaB->y, C_FG_WHITE | C_BG_BLUE);
     }
 }
+
+void actualizar_display_mapeadas(){
+    int i;
+    for (i = 0; i < CANT_TAREAS_J; ++i){
+        tarea* _tareaA = &GAME.js[A].tareas[i];
+        tarea* _tareaB = &GAME.js[B].tareas[i];
+        if (_tareaA->map ) print("A", _tareaA->x_map, _tareaA->y_map, C_FG_WHITE | C_BG_RED);
+        if (_tareaB->map ) print("B", _tareaB->x_map, _tareaB->y_map, C_FG_WHITE | C_BG_BLUE);
+    }
+}
+
 
 void mostrar_pantallita(unsigned short virus){
     pintar_rectangulo(25,7,54,42,C_FG_WHITE | C_BG_BLACK);

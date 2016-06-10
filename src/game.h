@@ -21,6 +21,10 @@ typedef struct str_tarea{
 	unsigned int x;
 	unsigned int y;
 	unsigned short vivo;
+	unsigned int x_map;
+	unsigned int y_map;
+	unsigned short map;
+	
 	id virus;
 
 	unsigned int cr3;
@@ -52,6 +56,7 @@ void game_mapear(unsigned int x, unsigned y);
 void game_soy(unsigned int soy);
 void game_donde(unsigned int* pos);
 
+void game_matar();
 void game_mover_cursor(jugador* j, direccion dir);
 
 void game_inicializar();

@@ -75,6 +75,17 @@ unsigned int tss_entrada_disponible(){
 	return i;
 }
 
+void tss_matar(unsigned short segmento){
+    tss* tarea_muerta;
+    gdt_entry entry = gdt[segmento >> 3];
+    tarea_muerta = (tss*)((unsigned int) entry.base_0_15 | (unsigned int) entry.base_23_16 << 16 | (unsigned int) entry.base_31_24 << 24);
+    unsigned int cr3 = tarea_muerta->cr3;
+    mmu_liberar_directorio(cr3); //Libero directorio
+    mmu_liberar_pagina((unsigned int)tarea_muerta->esp0); //Libero pila de kernel
+    mmu_liberar_pagina((unsigned int)tarea_muerta); //Libero tss
+    entry.p = 0;
+}
+
 void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y, unsigned short* segmento, unsigned int* cr3){
 	// codigo = (unsigned int*) 0x11000;
 	unsigned int disp = tss_entrada_disponible();

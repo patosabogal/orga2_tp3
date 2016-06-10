@@ -38,6 +38,8 @@ void mmu_inicializar_dir_kernel();
 unsigned int mmu_proxima_pagina_fisica_libre();
 void mmu_mapear_pagina(unsigned int virtu, unsigned int cr3, unsigned int fisica, unsigned int user);
 unsigned int mmu_inicializar_dir_tarea();
+void mmu_liberar_directorio();
+void mmu_liberar_pagina(unsigned int fisica);
 unsigned int pointToAddr(unsigned int x,unsigned int y);
 
 #endif	/* !__MMU_H__ */
