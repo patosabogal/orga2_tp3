@@ -29,7 +29,6 @@ typedef struct str_tarea{
 
 typedef struct str_jugador{
 	unsigned int vidas;
-	unsigned int puntos;
 	unsigned int x;
 	unsigned int y;
 	unsigned short actual;

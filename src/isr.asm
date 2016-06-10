@@ -173,31 +173,37 @@ _isr33:
 
 global _isr102
 _isr102:
-    ;pushad
-    ;push ebx
+    pushad
+    push ebx
 
-    ;cmp eax,DONDE
-    ;jne .MELLAMARONMAL
-    ;call game_donde
-
-    ; .SOY:
-    ; cmp eax,SOY
-    ; jne .MAPEAR
-    ; call game_soy
+    cmp eax,DONDE
+    jne .SOY
+    call game_donde
+    jmp .fin
 
 
-    ; .MAPEAR:
-    ; cmp eax, MAPEAR
-    ; jne .MELLAMARONMAL
-    ; push ecx
-    ; call game_mapear
-    ; pop ecx
+    .SOY:
+    cmp eax,SOY
+    jne .MAPEAR
+    call game_soy
+    jmp .fin
 
-    ;.MELLAMARONMAL:
+    .MAPEAR:
+    cmp eax, MAPEAR
+    jne .MELLAMARONMAL
+    push ecx
+    call game_mapear
+    pop ecx
+    jmp .fin
+
+    .MELLAMARONMAL:
     ;mov dword [esp + ADDR_SIZE*OFFSET_ECX], 0x42
 
-    ;pop ebx
-    ;popad
+    .fin:
+    jmp 0x50:0x69 ;Idle
+
+    pop ebx
+    popad
     iret
 
 ;; Funciones Auxiliares

@@ -41,9 +41,10 @@ void task() {
       }
     }
   }*/
+    
   int pos[2];
-  breakpoint();
   syscall_donde(pos);
+  //breakpoint();
   while(1){
 
   }

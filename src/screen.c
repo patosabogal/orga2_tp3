@@ -96,9 +96,29 @@ void actualizar_display_vidas(){
     print_int(GAME.js[B].vidas, 64, 48, C_FG_WHITE | C_BG_BLACK);
 }
 
+int _puntos(id j){
+    unsigned int puntos = 0;
+    unsigned int i = 0;
+    for(i = 0; i < CANT_H; i++){
+        if(GAME.iniciales[i].vivo && GAME.iniciales[i].virus == j){
+            puntos++;
+        }
+    }
+    for(i = 0; i <CANT_TAREAS_J; i++){
+        if(GAME.js[A].tareas[i].vivo && GAME.js[A].tareas[i].virus == j){
+            puntos++;
+        }
+        if(GAME.js[B].tareas[i].vivo && GAME.js[B].tareas[i].virus == j){
+            puntos++;
+        }
+    }
+    return puntos;
+}
 void actualizar_display_puntos(){
-    print_int(GAME.js[A].puntos, 51, 47, C_FG_WHITE | C_BG_RED);
-    print_int(GAME.js[B].puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
+    unsigned int puntos = _puntos(A);
+    print_int(puntos, 51, 47, C_FG_WHITE | C_BG_RED);
+    puntos = _puntos(B);
+    print_int(puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
 }
 
 void actualizar_display_cursores(){

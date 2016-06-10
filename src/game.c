@@ -29,6 +29,7 @@ void game_lanzar(id j) {
 	
 	if(i != CANT_TAREAS_J){
 		GAME.js[j].tareas[i] = nueva_tarea(codigo,x,y,j);
+		GAME.js[j].vidas --;
 	}
 }
 
@@ -44,12 +45,15 @@ void game_soy(unsigned int yoSoy) {
 }
 
 void game_donde(unsigned int* pos) {
-	//print_int(GAME.tareaActual->x, 57, 47, C_FG_WHITE | C_BG_BLUE);
 	pos[0] = GAME.tareaActual->x;
-	pos[1] = GAME.tareaActual->y;
+	pos[1] = GAME.tareaActual->y-1;//Posicion relativa a la pantalla de juego
 }
 
 void game_mapear(unsigned int x,unsigned int y) {
+	if(x >= SIZE_W || y >= SIZE_H){
+		return;
+	}
+	
 	mmu_mapear_pagina(CODIGO_MAPEADO,GAME.tareaActual->cr3,pointToAddr(x,y),PG_USER);
 }
 
@@ -57,7 +61,6 @@ void game_mapear(unsigned int x,unsigned int y) {
 void game_inicializar(){
 	jugador jug_A = {
 		15,		// vidas
-		0,		// puntos
 		0,		// x inicial
 		1,		// y inicial
 		0		// Tarea Actual
@@ -65,7 +68,6 @@ void game_inicializar(){
 
 	jugador jug_B = {
 		15,		// vidas
-		0,		// puntos
 		79,		// x inicial
 		1,		// y inicial
 		0		// Tarea Actual
