@@ -26,7 +26,7 @@ typedef struct str_tarea{
 	unsigned short map;
 	
 	id virus;
-
+	unsigned char reloz;
 	unsigned int cr3;
 	unsigned short selector_tss;
 } tarea;

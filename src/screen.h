@@ -50,4 +50,10 @@ void mostrar_pantallita(unsigned short virus);
 
 void print_registro32(const char* registro);
 
+void print_char(unsigned char c, unsigned int x, unsigned int y, unsigned short attr);
+
+void actualizar_display_relozJ();
+
+void actualizar_display_relozS();
+
 #endif  /* !__SCREEN_H__ */

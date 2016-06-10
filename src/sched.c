@@ -55,6 +55,24 @@ void _proximaJug(id _id){
 	}while(j->tareas[j->actual].vivo == 0);
 }
 
+unsigned char prox_reloz(unsigned char r){
+	unsigned char re = r;
+	if(r=='-'){
+	 re = '\\';
+	}
+	else if(r=='\\'){
+		re = '|';
+	}
+	else if(r=='|'){
+			re = '/';
+	}
+	else if(r=='/'){
+			re = '-';
+	}
+
+return re;
+}
+
 unsigned short _selector_proxima_tarea(id _id){
 	unsigned short _siguiente_selector;
 	if (_id == H) {
@@ -81,6 +99,9 @@ unsigned short _selector_proxima_tarea(id _id){
 			_siguiente_selector = 0;
 		}
 	}
+	GAME.tareaActual->reloz = prox_reloz(GAME.tareaActual->reloz);
+	actualizar_display_relozJ();
+	actualizar_display_relozS();
 	return _siguiente_selector;
 }
 

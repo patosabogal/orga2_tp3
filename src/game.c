@@ -121,6 +121,7 @@ tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y, id tipo)
 	nueva_tarea.virus = tipo;
 	nueva_tarea.selector_tss = _selector_tss;
 	nueva_tarea.cr3 = _cr3;
+	nueva_tarea.reloz = '-';
 	return nueva_tarea;
 }
 
