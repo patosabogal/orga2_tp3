@@ -10,6 +10,27 @@
 
 game_state GAME;
 unsigned int DEBUG_MODE = FALSE;
+unsigned int HALT = FALSE;
+
+unsigned short _tarea_en(unsigned int x, unsigned int y){
+	unsigned int i = 0;
+	unsigned short ret = FALSE;
+	while(i < CANT_H && !(GAME.iniciales[i].x == x && GAME.iniciales[i].y == y)){
+		i++;
+	}
+	ret = i != CANT_H;
+
+	i = 0;
+	while(i < CANT_TAREAS_J && 
+		!(GAME.js[A].tareas[i].x == x && GAME.js[A].tareas[i].y == y) &&
+		!(GAME.js[B].tareas[i].x == x && GAME.js[B].tareas[i].y == y))
+		{
+		i++;
+	}
+
+	ret = ret || (i != CANT_TAREAS_J);
+	return ret;
+}
 
 void game_lanzar(id j) {
 	unsigned int x = GAME.js[j].x;
@@ -27,11 +48,15 @@ void game_lanzar(id j) {
 		i++;
 	}
 	
-	if(i != CANT_TAREAS_J){
+	if(i != CANT_TAREAS_J && !_tarea_en(x,y)){
 		GAME.js[j].tareas[i] = nueva_tarea(codigo,x,y,j);
 		GAME.js[j].vidas --;
 	}
+	actualizar_display_vidas();
+    actualizar_display_puntos();
 }
+
+
 
 void game_soy(unsigned int yoSoy) {
 	switch(yoSoy){
@@ -42,11 +67,15 @@ void game_soy(unsigned int yoSoy) {
 			GAME.tareaActual->virus = B;
 			break;
 	}
+	actualizar_display_vidas();
+    actualizar_display_puntos();
+	actualizar_display_punto(GAME.tareaActual->x,GAME.tareaActual->y);
 }
 
 void game_donde(unsigned int* pos) {
 	pos[0] = GAME.tareaActual->x;
 	pos[1] = GAME.tareaActual->y-1;//Posicion relativa a la pantalla de juego
+	//print_hex((unsigned int) pos,8,50,0,C_FG_WHITE);
 }
 
 void game_mapear(unsigned int x,unsigned int y) {
@@ -54,15 +83,30 @@ void game_mapear(unsigned int x,unsigned int y) {
 		return;
 	}
 	
-	mmu_mapear_pagina(CODIGO_MAPEADO,GAME.tareaActual->cr3,pointToAddr(x,y),PG_USER);
+	unsigned int x_old,y_old;
+	x_old = GAME.tareaActual->x_map;
+	y_old = GAME.tareaActual->y_map;
+
+	mmu_mapear_pagina(CODIGO_MAPEADO,GAME.tareaActual->cr3,pointToAddr(x,y+1),PG_USER);
 	GAME.tareaActual->x_map = x;
-	GAME.tareaActual->y_map = x;
+	GAME.tareaActual->y_map = y+1; //Guardo absolutos
 	GAME.tareaActual->map = TRUE;
+	actualizar_display_punto(x_old,y_old);
+	actualizar_display_punto(x,y+1);
 }
 
-void game_matar(){
+void game_matar(unsigned int* registros){
+	if(DEBUG_MODE){
+		mostrar_debug(registros);
+		HALT = TRUE;
+	}
+
 	GAME.tareaActual->vivo = FALSE;
 	tss_matar(GAME.tareaActual->selector_tss);
+	actualizar_display_vidas();
+    actualizar_display_puntos();
+	actualizar_display_punto(GAME.tareaActual->x,GAME.tareaActual->y);
+
 }
 
 void game_inicializar(){
@@ -121,14 +165,23 @@ tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y, id tipo)
 	nueva_tarea.virus = tipo;
 	nueva_tarea.selector_tss = _selector_tss;
 	nueva_tarea.cr3 = _cr3;
-	nueva_tarea.reloz = '-';
+	nueva_tarea.reloj = '-';
 	return nueva_tarea;
 }
 
 void atender_teclado(const char tecla_fea){
 	unsigned int tecla = (unsigned int) tecla_fea;
 	// print_hex(tecla, 2, 78, 0, C_FG_WHITE | C_BG_RED);	// Imprimir en esquina derecha el codigo presionado
+	if(HALT){
 
+		if(tecla == 0x15){
+			breakpoint();
+			HALT = FALSE;
+			screen_inicializar();
+		}
+
+		return;
+	}
 	switch(tecla){
 		case 0x11:	// W
 			game_mover_cursor(&GAME.js[A], arriba);
@@ -156,25 +209,28 @@ void atender_teclado(const char tecla_fea){
 			break;
 		case 0x2a:	// LShift
 			game_lanzar(A);
-			// Lanzar tarea
 			break;
 		case 0x36:	// RShift
 			game_lanzar(B);
-			// Lanzar tarea
 			break;			
 		case 0x15:	// Y
-			if (DEBUG_MODE){
-				DEBUG_MODE = FALSE;
-			} else {
+			if(!DEBUG_MODE){
 				DEBUG_MODE = TRUE;
+			}else if (DEBUG_MODE && !HALT){
+				DEBUG_MODE = FALSE;
+			}else if(DEBUG_MODE && HALT){
+				HALT = FALSE;
 			}
-			// Lanzar tarea
+			actualizar_display_debug_mode();
 			break;
 	}
 
 }
 
 void game_mover_cursor(jugador* j, direccion dir){
+	//Muevo
+	unsigned int y = j->y;
+	unsigned int x = j->x;
 	switch(dir){
 		case arriba:
 			if (j->y == 1){
@@ -209,4 +265,5 @@ void game_mover_cursor(jugador* j, direccion dir){
 			break;
 	}
 
+	actualizar_display_punto(x,y);
 }

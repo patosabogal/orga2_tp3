@@ -40,8 +40,8 @@ LS_INLINE unsigned int syscall_mapear(int x, int y) {
     
     __asm __volatile(
         "mov $0xFF3, %%eax \n"
-        "mov %0, %%ebx \n"
-        "mov %1, %%ecx \n"
+        "mov %1, %%ebx \n"
+        "mov %0, %%ecx \n"
         "int $0x66     \n"
         : /* no output*/
         : "m" (x), "m" (y)

@@ -30,6 +30,7 @@ extern game_donde
 extern game_soy
 extern game_matar
 
+
 intmsg0: db 'Divide Error'
 intlen0 equ    $ - intmsg0
 intmsg1: db 'RESERVED'
@@ -75,13 +76,74 @@ intlen19 equ    $ - intmsg19
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
 
+
+%macro ISR_EC 1
+global _isr%1
+
+_isr%1:
+    ;Mas arriba estan error code, eip, cs, eflags, esp, ss
+    lea esp,[esp+4] ;Piso el error code
+    push eax
+    push ecx
+    push edx
+    push ebx
+    push ebp
+    push esi
+    push edi
+    push ds
+    push es
+    push fs
+    push gs
+    mov eax,cr0
+    push eax
+    mov eax,cr2
+    push eax
+    mov eax,cr3
+    push eax
+    mov eax,cr4
+    push eax
+    push esp ;Mostrar pantallita recibe lista entera
+    call game_matar
+
+    mov eax, %1
+    imprimir_texto_mp intmsg%1, intlen%1, 0x07, 0, 0
+    mov ax,0x48;Tarea inicial dummy
+    ltr ax
+
+    sti
+    jmp 0x50:0x69 ;Idle
+%endmacro
+
 %macro ISR 1
 global _isr%1
 
 _isr%1:
+    ;Mas arriba estan eip, cs, eflags, esp, ss
+    push eax
+    push ecx
+    push edx
+    push ebx
+    push ebp
+    push esi
+    push edi
+    push ds
+    push es
+    push fs
+    push gs
+    mov eax,cr0
+    push eax
+    mov eax,cr2
+    push eax
+    mov eax,cr3
+    push eax
+    mov eax,cr4
+    push eax
+    push esp ;Mostrar pantallita recibe lista entera
+
+    call game_matar
+
     mov eax, %1
     imprimir_texto_mp intmsg%1, intlen%1, 0x07, 0, 0
-    call game_matar
     mov ax,0x48;Tarea inicial dummy
     ltr ax
 
@@ -106,15 +168,15 @@ ISR 4
 ISR 5
 ISR 6
 ISR 7
-ISR 8
+ISR_EC 8
 ISR 9
-ISR 10
-ISR 11
-ISR 12
-ISR 13
-ISR 14
+ISR_EC 10
+ISR_EC 11
+ISR_EC 12
+ISR_EC 13
+ISR_EC 14
 ISR 16
-ISR 17
+ISR_EC 17
 ISR 18
 ISR 19
 
@@ -125,14 +187,23 @@ ISR 19
 
 sched_tarea_offset:     dd 0x00
 sched_tarea_selector:   dw 0x00
+screen_timer:   dw 0
 
 global _isr32
 _isr32:
     pushad
+    ;inc word [screen_timer]
+    ;cmp word [screen_timer],5
+    ;jne .noActualizar
+    ;mov word [screen_timer],0
 
+    ;call screen_inicializar
+
+    .noActualizar:
     call fin_intr_pic1
     call proximo_reloj
     call sched_proximo_indice
+
     ;mov ax,0
     cmp ax, 0
     je  .end
@@ -156,7 +227,6 @@ _isr33:
     call atender_teclado
     pop eax
 
-    call screen_inicializar
     call fin_intr_pic1
     popad
     iret

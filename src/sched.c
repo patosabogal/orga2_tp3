@@ -55,7 +55,7 @@ void _proximaJug(id _id){
 	}while(j->tareas[j->actual].vivo == 0);
 }
 
-unsigned char prox_reloz(unsigned char r){
+unsigned char prox_reloj(unsigned char r){
 	unsigned char re = r;
 	if(r=='-'){
 	 re = '\\';
@@ -70,7 +70,7 @@ unsigned char prox_reloz(unsigned char r){
 			re = '-';
 	}
 
-return re;
+	return re;
 }
 
 unsigned short _selector_proxima_tarea(id _id){
@@ -99,14 +99,19 @@ unsigned short _selector_proxima_tarea(id _id){
 			_siguiente_selector = 0;
 		}
 	}
-	GAME.tareaActual->reloz = prox_reloz(GAME.tareaActual->reloz);
-	actualizar_display_relozJ();
-	actualizar_display_relozS();
+	GAME.tareaActual->reloj = prox_reloj(GAME.tareaActual->reloj);
+	
+	actualizar_display_relojJ();
+	actualizar_display_relojS();
+
 	return _siguiente_selector;
 }
 
 unsigned short sched_proximo_indice() {
-
+	if(HALT){
+		return 0;
+	}
+	
 	id _actual = GAME.corriendo;
 
 	id _prox = _proximo_tipo(_actual);

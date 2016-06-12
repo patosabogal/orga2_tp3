@@ -26,7 +26,7 @@ typedef struct str_tarea{
 	unsigned short map;
 	
 	id virus;
-	unsigned char reloz;
+	unsigned char reloj;
 	unsigned int cr3;
 	unsigned short selector_tss;
 } tarea;
@@ -71,5 +71,6 @@ void game_inicializar_tareas_jugadores();
 
 extern game_state GAME;
 extern unsigned int DEBUG_MODE;
+extern unsigned int HALT;
 
 #endif  /* !__GAME_H__ */

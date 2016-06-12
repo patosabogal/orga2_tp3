@@ -32,7 +32,9 @@ void screen_inicializar();
 
 void escribir_nombre_grupo();
 
-void actualizar_dislpay_estatico();
+void actualizar_display_estatico();
+
+void actualizar_display_punto(unsigned int x, unsigned int y);
 
 void actualizar_display_vidas();
 
@@ -46,14 +48,14 @@ void actualizar_display_tareas();
 
 void actualizar_display_mapeadas();
 
-void mostrar_pantallita(unsigned short virus);
+void mostrar_debug(unsigned int* registros);
 
-void print_registro32(const char* registro);
+//void print_registro32(const char* registro);
 
 void print_char(unsigned char c, unsigned int x, unsigned int y, unsigned short attr);
 
-void actualizar_display_relozJ();
+void actualizar_display_relojJ();
 
-void actualizar_display_relozS();
+void actualizar_display_relojS();
 
 #endif  /* !__SCREEN_H__ */
