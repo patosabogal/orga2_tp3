@@ -104,6 +104,7 @@ void game_matar(unsigned int* registros){
 	GAME.tareaActual->vivo = FALSE;
 	tss_matar(GAME.tareaActual->selector_tss);
 	actualizar_display_vidas();
+	actualizar_display_mapeadas();
     actualizar_display_puntos();
 	actualizar_display_punto(GAME.tareaActual->x,GAME.tareaActual->y);
 

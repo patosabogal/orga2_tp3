@@ -76,6 +76,7 @@ start:
     ; Saltar a modo protegido
     jmp 0x20:modoprotegido
     modoprotegido:
+
     BITS 32
     ; Establecer selectores de segmentos
     mov ax,0x30
@@ -95,8 +96,7 @@ start:
     imprimir_texto_mp iniciando_mp_msg, iniciando_mp_len, 0x07, 2, 0
 
     ; Inicializar pantalla
-    ; call screen_inicializar
-    
+    call limpiarPantalla
     ; Inicializar el manejador de memoria
     call mmu_inicializar
     ; Inicializar el directorio de paginas
@@ -164,7 +164,7 @@ limpiarPantalla:
     .ciclo:
         mov word [fs:ecx],0x07DB
         add ecx,2
-        cmp ecx,0xFA00 ;80*50*2bytes
+        cmp ecx,0x1F40 ;80*50*2bytes
         jne .ciclo
 
     ret

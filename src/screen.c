@@ -281,7 +281,7 @@ void actualizar_display_mapeadas(){
         tarea* _tareaA = &GAME.js[A].tareas[i];
         tarea* _tareaB = &GAME.js[B].tareas[i];
         if (_tareaA->vivo && _tareaA->map ) print("A", _tareaA->x_map, _tareaA->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
-        if (_tareaA->vivo && _tareaB->map ) print("B", _tareaB->x_map, _tareaB->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
+        if (_tareaB->vivo && _tareaB->map ) print("B", _tareaB->x_map, _tareaB->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
     }
 }
     
