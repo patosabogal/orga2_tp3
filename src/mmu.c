@@ -40,19 +40,19 @@ void mmu_inicializar_dir_kernel() {
 }
 unsigned int mmu_proxima_pagina_fisica_libre() {
 	unsigned int pagina_libre;
-	if(pila_libres.cant == 0){
+	//if(pila_libres.cant == 0){
 		pagina_libre = proxima_pagina_libre;
 		proxima_pagina_libre += PAGE_SIZE;
-	}
+	/*}
 	else{
 		pagina_libre = pop_pila(&pila_libres);
-	}
+	}*/
 	return pagina_libre;
 }
 
 void mmu_liberar_pagina(unsigned int pagina){
 	//print_hex((unsigned int) pila_libres.tope,8,0,0,C_FG_WHITE | C_BG_BLACK);
-	push_pila(&pila_libres, pagina);
+	//push_pila(&pila_libres, pagina);
 	return;
 }
 
@@ -117,6 +117,7 @@ void mmu_liberar_directorio(unsigned int cr3){
 
 	page_entries_set* pd = (page_entries_set*) cr3;
 	unsigned int i = 0;
+
 	while(i < 1024){
 		if(pd->page_entries[i].attr & PG_PRESENT){
 			page_entries_set* pt = (page_entries_set*) (pd->page_entries[i].base_page_addr << 12);
@@ -149,6 +150,7 @@ unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, uns
 	//CODIGO EN LA 8kk
 	unsigned int* addr = (unsigned int*) pointToAddr(x,y);
 	mmu_mapear_pagina(CODIGO,(unsigned int) pd,(unsigned int) addr, PG_USER);
+	
 	//MAPEO EN EL KERNEL LA DIRECCION TAMBIEN
 	mmu_mapear_pagina((unsigned int) addr,rcr3(),(unsigned int) addr,0);
 	i = 0;
@@ -158,6 +160,5 @@ unsigned int mmu_inicializar_dir_tarea(unsigned int* codigo, unsigned int x, uns
 		i++;
 	}
 	mmu_unmapear_pagina((unsigned int) addr,rcr3());
-		
 	return (unsigned int) pd;
 }

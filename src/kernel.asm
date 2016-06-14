@@ -146,7 +146,7 @@ start:
     ;call mostrar_pantallita
 
     ; Saltar a la primera tarea: Idle
-    jmp 0x50:0x69 ;Idle
+    ;jmp 0x50:0x69 ;Idle
 
     ; Ciclar infinitamente (por si algo sale mal...)
 

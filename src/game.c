@@ -99,6 +99,7 @@ void game_matar(unsigned int* registros){
 	actualizar_display_mapeadas();
     actualizar_display_puntos();
 	actualizar_display_punto(SCHED.tareaActual->x,SCHED.tareaActual->y);
+
 	if(GAME.DEBUG_MODE){
 		mostrar_debug(registros);
 		GAME.HALT = TRUE;

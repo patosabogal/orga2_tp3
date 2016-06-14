@@ -40,6 +40,7 @@ typedef struct str_sched_j{
 
 typedef struct str_scheduler{
 	id corriendo;
+	unsigned short idle;
 	tarea* tareaActual;
 	unsigned int actual;
 	tarea tareas[15];

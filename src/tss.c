@@ -77,13 +77,13 @@ unsigned int tss_entrada_disponible(){
 
 void tss_matar(unsigned short segmento){
     tss* tarea_muerta;
-    gdt_entry entry = gdt[segmento >> 3];
-    tarea_muerta = (tss*)((unsigned int) entry.base_0_15 | (unsigned int) entry.base_23_16 << 16 | (unsigned int) entry.base_31_24 << 24);
+    gdt_entry* entry = &gdt[segmento >> 3];
+    tarea_muerta = (tss*)((unsigned int) entry->base_0_15 | (unsigned int) entry->base_23_16 << 16 | (unsigned int) entry->base_31_24 << 24);
     unsigned int cr3 = tarea_muerta->cr3;
     mmu_liberar_directorio(cr3); //Libero directorio
     mmu_liberar_pagina((unsigned int)tarea_muerta->esp0); //Libero pila de kernel
     mmu_liberar_pagina((unsigned int)tarea_muerta); //Libero tss
-    entry.p = 0;
+    entry->p = 0;
 }
 
 void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y, unsigned short* segmento, unsigned int* cr3){
@@ -99,7 +99,7 @@ void tss_nueva(unsigned int* codigo, unsigned int x, unsigned int y, unsigned sh
 
     unsigned int pila0 = mmu_proxima_pagina_fisica_libre() + PAGE_SIZE;
     unsigned int _cr3 = mmu_inicializar_dir_tarea(codigo, x, y);
-
+    
 	tss_tn->eip = CODIGO; //Direccion de codigo mapeada a codigo de la tarea
 	tss_tn->ebp = BASE_PILA_TAREA;
 	tss_tn->esp = BASE_PILA_TAREA;

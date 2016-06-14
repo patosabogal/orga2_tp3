@@ -13,7 +13,10 @@ scheduler SCHED;
 void sched_inicializar(){
 	SCHED.actual = 0;
 	SCHED.corriendo = H;
+	SCHED.js[A].actual = 0;
+	SCHED.js[B].actual = 0;
 
+	SCHED.idle = TRUE;
 	sched_inicializar_tareas_iniciales();
 	sched_inicializar_tareas_jugadores();
 }
@@ -22,6 +25,7 @@ void sched_inicializar_tareas_iniciales(){
 	int i;
 	for (i = 0; i < CANT_H; ++i)
 	{
+		//SCHED.tareas[i].vivo = FALSE;
 		SCHED.tareas[i] = sched_nueva_tarea((unsigned int *)CODIGO_TAREA_H, 16+i, 16-i,H);
 	}
 }
@@ -122,8 +126,16 @@ unsigned char prox_reloj(unsigned char r){
 
 unsigned short _selector_proxima_tarea(id _id){
 	unsigned short _siguiente_selector;
+	unsigned int _actual_selector;
+
+	if(SCHED.idle){
+		_actual_selector = 0;
+	}else{
+		_actual_selector = SCHED.tareaActual->selector_tss;
+		SCHED.idle = FALSE;
+	}
+
 	if (_id == H) {
-		unsigned int _actual_selector = SCHED.tareaActual->selector_tss;
 		_proximaSana();
 		SCHED.tareaActual = &SCHED.tareas[SCHED.actual];
 		_siguiente_selector = SCHED.tareaActual->selector_tss;
@@ -132,16 +144,12 @@ unsigned short _selector_proxima_tarea(id _id){
 			_siguiente_selector = 0;
 		}
 	} else {
-		//print_int(SCHED.js[_id].actual,50,0,C_FG_WHITE | C_BG_CYAN);
+		
 		_proximaJug(_id);
-		
-		unsigned int _actual_selector = SCHED.tareaActual->selector_tss;
 		unsigned int actual = SCHED.js[_id].actual;
-		
-
 		SCHED.tareaActual = &SCHED.js[_id].tareas[actual];
 		_siguiente_selector = SCHED.tareaActual->selector_tss;
-		
+
 		if(_siguiente_selector == _actual_selector){
 			_siguiente_selector = 0;
 		}
@@ -176,8 +184,14 @@ unsigned short sched_proximo_indice() {
 	if (_tiene_vivos(_actual)){
 		SCHED.corriendo = _actual;
 		unsigned short _proxSegmento = _selector_proxima_tarea(_actual);
+		
 		return _proxSegmento;
 	}
 
-	return 0;
+	if(SCHED.idle){
+		return 0;
+	}
+
+	SCHED.idle = TRUE; //Nada tiene nada vivo, vuelvo a la idle
+	return 0x50;
 }
