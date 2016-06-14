@@ -127,6 +127,7 @@ void game_inicializar(){
 void atender_teclado(const char tecla_fea){
 	unsigned int tecla = (unsigned int) tecla_fea;
 	// print_hex(tecla, 2, 78, 0, C_FG_WHITE | C_BG_RED);	// Imprimir en esquina derecha el codigo presionado
+
 	if(GAME.HALT){
 		if(tecla == 0x15){
 			GAME.HALT = FALSE;
