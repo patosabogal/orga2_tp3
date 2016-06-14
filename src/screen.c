@@ -220,9 +220,19 @@ int _puntos(id j){
 }
 void actualizar_display_puntos(){
     unsigned int puntos = _puntos(A);
-    print_int(puntos, 51, 47, C_FG_WHITE | C_BG_RED);
+    if(puntos<10){
+        print_int(puntos, 51, 47, C_FG_WHITE | C_BG_RED);
+        print(" ",50, 47, C_FG_WHITE | C_BG_RED);
+    }else{
+        print_int(puntos, 51, 47, C_FG_WHITE | C_BG_RED);
+    }
     puntos = _puntos(B);
-    print_int(puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
+    if(puntos<10){
+        print_int(puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
+        print(" ",56, 47, C_FG_WHITE | C_BG_BLUE);
+    }else{
+        print_int(puntos, 57, 47, C_FG_WHITE | C_BG_BLUE);
+    }
 }
 
 
@@ -239,6 +249,8 @@ void actualizar_display_cursores(){
 void actualizar_display_debug_mode(){
 	if (DEBUG_MODE){
         print("Y", 79, 0, C_FG_WHITE | C_BG_BLACK);
+    }else{
+        print(" ", 79, 0, C_FG_WHITE | C_BG_BLACK);
     }
 }
 
@@ -280,8 +292,22 @@ void actualizar_display_mapeadas(){
     for (i = 0; i < CANT_TAREAS_J; ++i){
         tarea* _tareaA = &GAME.js[A].tareas[i];
         tarea* _tareaB = &GAME.js[B].tareas[i];
-        if (_tareaA->vivo && _tareaA->map ) print("A", _tareaA->x_map, _tareaA->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
-        if (_tareaB->vivo && _tareaB->map ) print("B", _tareaB->x_map, _tareaB->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
+        if (_tareaA->vivo && _tareaA->map ){
+            if(_tareaA->virus == A){
+                print("A", _tareaA->x_map, _tareaA->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
+            }else{
+                print("B", _tareaA->x_map, _tareaA->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
+            }
+
+        }
+        if (_tareaB->vivo && _tareaB->map ){
+            if(_tareaB->virus == A){
+                print("A", _tareaB->x_map, _tareaB->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
+            }else{
+                print("B", _tareaB->x_map, _tareaB->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
+            }
+        }
+
     }
 }
     

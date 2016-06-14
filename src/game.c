@@ -96,10 +96,7 @@ void game_mapear(unsigned int x,unsigned int y) {
 }
 
 void game_matar(unsigned int* registros){
-	if(DEBUG_MODE){
-		mostrar_debug(registros);
-		HALT = TRUE;
-	}
+
 
 	GAME.tareaActual->vivo = FALSE;
 	tss_matar(GAME.tareaActual->selector_tss);
@@ -107,6 +104,11 @@ void game_matar(unsigned int* registros){
 	actualizar_display_mapeadas();
     actualizar_display_puntos();
 	actualizar_display_punto(GAME.tareaActual->x,GAME.tareaActual->y);
+
+	if(DEBUG_MODE){
+		mostrar_debug(registros);
+		HALT = TRUE;
+	}
 
 }
 
@@ -174,9 +176,7 @@ void atender_teclado(const char tecla_fea){
 	unsigned int tecla = (unsigned int) tecla_fea;
 	// print_hex(tecla, 2, 78, 0, C_FG_WHITE | C_BG_RED);	// Imprimir en esquina derecha el codigo presionado
 	if(HALT){
-
 		if(tecla == 0x15){
-			breakpoint();
 			HALT = FALSE;
 			screen_inicializar();
 		}
