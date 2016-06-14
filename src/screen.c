@@ -76,13 +76,13 @@ void pintar_rectangulo(unsigned int x, unsigned int y, unsigned int ancho, unsig
 void actualizar_display_relojJ(){
     unsigned int i = 0;
     while(i<CANT_TAREAS_J){
-        if(GAME.js[A].tareas[i].vivo){
-            print_char(GAME.js[A].tareas[i].reloj,2+2*i,46,C_FG_WHITE | C_BG_BLACK);
+        if(SCHED.js[A].tareas[i].vivo){
+            print_char(SCHED.js[A].tareas[i].reloj,2+2*i,46,C_FG_WHITE | C_BG_BLACK);
         }
         else
             print_char(' ',2+2*i,46,C_FG_WHITE | C_BG_BLACK);
-        if(GAME.js[B].tareas[i].vivo) 
-            print_char(GAME.js[B].tareas[i].reloj, 24+2*i,46,C_FG_WHITE | C_BG_BLACK);
+        if(SCHED.js[B].tareas[i].vivo) 
+            print_char(SCHED.js[B].tareas[i].reloj, 24+2*i,46,C_FG_WHITE | C_BG_BLACK);
         else
             print_char(' ', 24+2*i,46,C_FG_WHITE | C_BG_BLACK);
         i++;
@@ -92,8 +92,8 @@ void actualizar_display_relojJ(){
 void actualizar_display_relojS(){
     unsigned int i = 0;
     while(i<CANT_H){
-        if(GAME.iniciales[i].vivo) 
-            print_char(GAME.iniciales[i].reloj,2+2*i,48,C_FG_WHITE | C_BG_BLACK);
+        if(SCHED.tareas[i].vivo) 
+            print_char(SCHED.tareas[i].reloj,2+2*i,48,C_FG_WHITE | C_BG_BLACK);
         i++;
     }
 }
@@ -174,7 +174,7 @@ void actualizar_display_punto(unsigned int x, unsigned int y){
     //Tareas
     for (i = 0; i < CANT_H; ++i)
     {
-        tarea* _tarea = &GAME.iniciales[i];
+        tarea* _tarea = &SCHED.tareas[i];
 
         if (_tarea->vivo && _punto_en_rango(x,y, _tarea->x, _tarea->y,1,1)){
             print("H", _tarea->x, _tarea->y, C_FG_WHITE | _color(_tarea->virus));
@@ -182,8 +182,8 @@ void actualizar_display_punto(unsigned int x, unsigned int y){
     }
 
     for (i = 0; i < CANT_TAREAS_J; ++i){
-        tarea* _tareaA = &GAME.js[A].tareas[i];
-        tarea* _tareaB = &GAME.js[B].tareas[i];
+        tarea* _tareaA = &SCHED.js[A].tareas[i];
+        tarea* _tareaB = &SCHED.js[B].tareas[i];
         if (_tareaA->vivo && _punto_en_rango(x,y, _tareaA->x, _tareaA->y,1,1)) 
             print("A", _tareaA->x, _tareaA->y, C_FG_WHITE | _color(_tareaA->virus));
         if (_tareaB->vivo && _punto_en_rango(x,y, _tareaB->x, _tareaB->y,1,1)) 
@@ -204,15 +204,15 @@ int _puntos(id j){
     unsigned int puntos = 0;
     unsigned int i = 0;
     for(i = 0; i < CANT_H; i++){
-        if(GAME.iniciales[i].vivo && GAME.iniciales[i].virus == j){
+        if(SCHED.tareas[i].vivo && SCHED.tareas[i].virus == j){
             puntos++;
         }
     }
     for(i = 0; i <CANT_TAREAS_J; i++){
-        if(GAME.js[A].tareas[i].vivo && GAME.js[A].tareas[i].virus == j){
+        if(SCHED.js[A].tareas[i].vivo && SCHED.js[A].tareas[i].virus == j){
             puntos++;
         }
-        if(GAME.js[B].tareas[i].vivo && GAME.js[B].tareas[i].virus == j){
+        if(SCHED.js[B].tareas[i].vivo && SCHED.js[B].tareas[i].virus == j){
             puntos++;
         }
     }
@@ -237,7 +237,7 @@ void actualizar_display_cursores(){
 }
 
 void actualizar_display_debug_mode(){
-	if (DEBUG_MODE){
+	if (GAME.DEBUG_MODE){
         print("Y", 79, 0, C_FG_WHITE | C_BG_BLACK);
     }
 }
@@ -246,15 +246,15 @@ void actualizar_display_tareas(){
     int i;
     for (i = 0; i < CANT_H; ++i)
     {
-        tarea* _tarea = &GAME.iniciales[i];
+        tarea* _tarea = &SCHED.tareas[i];
 
         if (_tarea->vivo) 
             print("H", _tarea->x, _tarea->y, C_FG_WHITE | _color(_tarea->virus));
     }
 
     for (i = 0; i < CANT_TAREAS_J; ++i){
-        tarea* _tareaA = &GAME.js[A].tareas[i];
-        tarea* _tareaB = &GAME.js[B].tareas[i];
+        tarea* _tareaA = &SCHED.js[A].tareas[i];
+        tarea* _tareaB = &SCHED.js[B].tareas[i];
         if (_tareaA->vivo ) 
             print("A", _tareaA->x, _tareaA->y, C_FG_WHITE | _color(_tareaA->virus));
         if (_tareaB->vivo ) 
@@ -266,7 +266,7 @@ void actualizar_display_mapeadas(){
     int i;
     for (i = 0; i < CANT_H; ++i)
     {
-        tarea* _tarea = &GAME.iniciales[i];
+        tarea* _tarea = &SCHED.tareas[i];
 
         if (_tarea->vivo && _tarea->map){
             if(_tarea->virus == A){
@@ -278,8 +278,8 @@ void actualizar_display_mapeadas(){
     }
 
     for (i = 0; i < CANT_TAREAS_J; ++i){
-        tarea* _tareaA = &GAME.js[A].tareas[i];
-        tarea* _tareaB = &GAME.js[B].tareas[i];
+        tarea* _tareaA = &SCHED.js[A].tareas[i];
+        tarea* _tareaB = &SCHED.js[B].tareas[i];
         if (_tareaA->vivo && _tareaA->map ) print("A", _tareaA->x_map, _tareaA->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
         if (_tareaB->vivo && _tareaB->map ) print("B", _tareaB->x_map, _tareaB->y_map, C_FG_WHITE | C_BG_LIGHT_GREY);
     }
@@ -319,10 +319,10 @@ void mostrar_debug(unsigned int* registros){
     pintar_rectangulo(25,7,29,35,C_FG_WHITE | C_BG_BLACK);
     pintar_rectangulo(26,8,27,33,C_FG_WHITE | C_BG_LIGHT_GREY);
 
-    pintar_rectangulo(26,8,27,1,C_FG_WHITE | _color(GAME.corriendo));
-    if(GAME.corriendo == A) print("virus A", 26, 8, C_FG_WHITE | C_BG_RED);
-    if(GAME.corriendo == B) print("virus B", 26, 8, C_FG_WHITE | C_BG_BLUE);
-    if(GAME.corriendo == H) print("virus H", 26, 8, C_FG_WHITE | C_BG_GREEN);
+    pintar_rectangulo(26,8,27,1,C_FG_WHITE | _color(SCHED.corriendo));
+    if(SCHED.corriendo == A) print("virus A", 26, 8, C_FG_WHITE | C_BG_RED);
+    if(SCHED.corriendo == B) print("virus B", 26, 8, C_FG_WHITE | C_BG_BLUE);
+    if(SCHED.corriendo == H) print("virus H", 26, 8, C_FG_WHITE | C_BG_GREEN);
 
 
     print_registro("eax",registros[eax],8,27,10);
@@ -353,9 +353,11 @@ void mostrar_debug(unsigned int* registros){
     print_registro("cr4",registros[cr4],8,41,16);
 
     //Stack
-    print("stack",41,26,C_FG_BLACK | C_BG_LIGHT_GREY);
-    print_hex(*((unsigned int*) registros[esp]),8,41,28,C_FG_WHITE | C_BG_LIGHT_GREY);
-    print_hex(*((unsigned int*) registros[esp]+1),8,41,30,C_FG_WHITE | C_BG_LIGHT_GREY);
-    print_hex(*((unsigned int*) registros[esp]+2),8,41,32,C_FG_WHITE | C_BG_LIGHT_GREY);
-    print_hex(*((unsigned int*) registros[esp]+3),8,41,34,C_FG_WHITE | C_BG_LIGHT_GREY);
+    print("stack",41,18,C_FG_BLACK | C_BG_LIGHT_GREY);
+    unsigned int* s_esp = (unsigned int*) registros[esp];
+    unsigned int i = 0;
+    while((unsigned int) (s_esp+i) < registros[ebp] && i <= 10){
+        print_hex(*(s_esp+i),8,41,20+i*2,C_FG_WHITE | C_BG_LIGHT_GREY);
+        i++;
+    }
 } 

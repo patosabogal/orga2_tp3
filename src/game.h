@@ -11,40 +11,19 @@
 #include "screen.h"
 #include "mmu.h"
 
-typedef enum enum_id {
-	A = 0,
-	B = 1,
-	H = 2
-} id;
 
-typedef struct str_tarea{
-	unsigned int x;
-	unsigned int y;
-	unsigned short vivo;
-	unsigned int x_map;
-	unsigned int y_map;
-	unsigned short map;
-	
-	id virus;
-	unsigned char reloj;
-	unsigned int cr3;
-	unsigned short selector_tss;
-} tarea;
 
 typedef struct str_jugador{
 	unsigned int vidas;
 	unsigned int x;
 	unsigned int y;
 	unsigned short actual;
-	tarea tareas[5];
 } jugador;
 
 typedef struct str_game_state{
 	jugador js[2];
-	tarea iniciales[15];
-	unsigned short actual;
-	id corriendo;
-	tarea* tareaActual;
+	unsigned short DEBUG_MODE;
+	unsigned short HALT;
 } game_state;
 
 // typedef enum direccion_e { IZQ = 0xAAA, DER = 0x441, ARB = 0xA33, ABA = 0x883  } direccion;
@@ -63,14 +42,10 @@ void game_inicializar();
 
 void atender_teclado(char tecla);
 
-tarea nueva_tarea(unsigned int* codigo, unsigned int x, unsigned int y, id tipo);
 
 void game_inicializar_tareas_iniciales();
 
 void game_inicializar_tareas_jugadores();
 
 extern game_state GAME;
-extern unsigned int DEBUG_MODE;
-extern unsigned int HALT;
-
 #endif  /* !__GAME_H__ */

@@ -104,7 +104,6 @@ _isr%1:
     push eax
     push esp ;Mostrar pantallita recibe lista entera
     call game_matar
-
     mov eax, %1
     imprimir_texto_mp intmsg%1, intlen%1, 0x07, 0, 0
     mov ax,0x48;Tarea inicial dummy

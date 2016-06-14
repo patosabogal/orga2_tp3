@@ -21,9 +21,11 @@ extern resetear_pic
 
 extern screen_inicializar
 
+extern sched_inicializar
 ;TEST
 extern mmu_mapear_pagina
 extern game_inicializar
+
 extern screen_inicializar
 extern mostrar_pantallita
 extern tss_nueva
@@ -118,6 +120,7 @@ start:
     call tss_inicializar
 
     ; Inicializar el scheduler
+    call sched_inicializar
 
     ; Inicializar la IDT
     call idt_inicializar
