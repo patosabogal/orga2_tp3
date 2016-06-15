@@ -147,9 +147,9 @@ unsigned int _color(id j){
 
 
 void actualizar_display_punto(unsigned int x, unsigned int y){
-    //Pantalla Estatica
-    if(_punto_en_rango(x,y,0,0,80,1))
-        pintar_rectangulo(x, y, 1, 1, C_FG_WHITE | C_BG_BLACK);
+    // Pantalla Estatica
+     // if(_punto_en_rango(x,y,0,0,80,1))
+     //     pintar_rectangulo(x, y, 1, 1, C_FG_WHITE | C_BG_BLACK);
     if(_punto_en_rango(x,y,0,1,80,44)){
         pintar_rectangulo(x, y, 1, 1, C_FG_WHITE | C_BG_LIGHT_GREY);
     }

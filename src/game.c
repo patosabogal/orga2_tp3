@@ -13,15 +13,15 @@ game_state GAME;
 unsigned short _tarea_en(unsigned int x, unsigned int y){
 	unsigned int i = 0;
 	unsigned short ret = FALSE;
-	while(i < CANT_H && !(SCHED.tareas[i].x == x && SCHED.tareas[i].y == y)){
+	while(i < CANT_H && (!(SCHED.tareas[i].x == x && SCHED.tareas[i].y == y) || !(SCHED.tareas[i].vivo))){
 		i++;
 	}
 	ret = i != CANT_H;
 
 	i = 0;
 	while(i < CANT_TAREAS_J && 
-		!(SCHED.js[A].tareas[i].x == x && SCHED.js[A].tareas[i].y == y) &&
-		!(SCHED.js[B].tareas[i].x == x && SCHED.js[B].tareas[i].y == y))
+		(!(SCHED.js[A].tareas[i].x == x && SCHED.js[A].tareas[i].y == y) || !(SCHED.js[A].tareas[i].vivo))&&
+		(!(SCHED.js[B].tareas[i].x == x && SCHED.js[B].tareas[i].y == y) || !(SCHED.js[B].tareas[i].vivo)))
 		{
 		i++;
 	}
@@ -34,7 +34,6 @@ void game_lanzar(id j) {
 	unsigned int x = GAME.js[j].x;
 	unsigned int y = GAME.js[j].y;
 	unsigned int* codigo;
-
 	if(j == A){
 		codigo = (unsigned int*)CODIGO_TAREA_B;
 	}else{
@@ -95,11 +94,12 @@ void game_mapear(unsigned int x,unsigned int y) {
 void game_matar(unsigned int* registros){
 	SCHED.tareaActual->vivo = FALSE;
 	tss_matar(SCHED.tareaActual->selector_tss);
-	actualizar_display_vidas();
-	actualizar_display_mapeadas();
-    actualizar_display_puntos();
-	actualizar_display_punto(SCHED.tareaActual->x,SCHED.tareaActual->y);
-	actualizar_display_punto(SCHED.tareaActual->x_map,SCHED.tareaActual->y_map);
+	screen_inicializar();
+	// actualizar_display_vidas();
+	// actualizar_display_mapeadas();
+ //    actualizar_display_puntos();
+	// actualizar_display_punto(SCHED.tareaActual->x,SCHED.tareaActual->y);
+	// actualizar_display_punto(SCHED.tareaActual->x_map,SCHED.tareaActual->y_map);
 	if(GAME.DEBUG_MODE){
 		mostrar_debug(registros);
 		GAME.HALT = TRUE;
@@ -173,13 +173,13 @@ void atender_teclado(const char tecla_fea){
 				GAME.DEBUG_MODE = TRUE;
 			}else if (GAME.DEBUG_MODE && GAME.HALT){
 				GAME.DEBUG_MODE = FALSE;
-			}else if(GAME.DEBUG_MODE &&GAME.HALT){
-			GAME.HALT = FALSE;
+				GAME.HALT = FALSE;
+			}else{
+				GAME.DEBUG_MODE = FALSE;
 			}
 			actualizar_display_debug_mode();
 			break;
 	}
-
 }
 
 void game_mover_cursor(jugador* j, direccion dir){
@@ -219,6 +219,5 @@ void game_mover_cursor(jugador* j, direccion dir){
 			}
 			break;
 	}
-
 	actualizar_display_punto(x,y);
 }

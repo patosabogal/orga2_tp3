@@ -25,8 +25,8 @@ void sched_inicializar_tareas_iniciales(){
 	int i;
 	for (i = 0; i < CANT_H; ++i)
 	{
-		SCHED.tareas[i].vivo = FALSE;
-		//SCHED.tareas[i] = sched_nueva_tarea((unsigned int *)CODIGO_TAREA_H, 16+i, 16-i,H);
+		//SCHED.tareas[i].vivo = FALSE;
+		SCHED.tareas[i] = sched_nueva_tarea((unsigned int *)CODIGO_TAREA_H, 16+i, 16-i,H);
 	}
 }
 
